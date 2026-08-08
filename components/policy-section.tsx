@@ -4,6 +4,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { ScrambleText } from "@/components/motion/scramble-text"
 import { WeightScroll } from "@/components/motion/weight-scroll"
 import { Reveal } from "@/components/motion/reveal"
+import { GyroLayer } from "@/components/motion/gyro-layer"
 import { AnimatedWords } from "@/components/motion/animated-text"
 import { useLanguage } from "@/lib/language-context"
 
@@ -33,6 +34,7 @@ export function PolicySection() {
           </Reveal>
 
           <Reveal delay={0.3}>
+            <GyroLayer strength={0.3}>
             <Accordion type="single" collapsible className="mt-10 border-t border-border">
               {CLAUSES.map((clause) => (
                 <AccordionItem key={clause} value={clause} className="border-border">
@@ -45,6 +47,7 @@ export function PolicySection() {
                 </AccordionItem>
               ))}
             </Accordion>
+            </GyroLayer>
           </Reveal>
 
           <Reveal delay={0.4}>

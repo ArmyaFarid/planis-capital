@@ -2,6 +2,7 @@
 
 import { useRef } from "react"
 import { motion, useMotionValue, useReducedMotion, useScroll, useVelocity, useAnimationFrame } from "motion/react"
+import { GyroLayer } from "@/components/motion/gyro-layer"
 import { useLanguage } from "@/lib/language-context"
 import { cn } from "@/lib/utils"
 
@@ -47,6 +48,7 @@ export function MarqueeBand({ className, speed = 55 }: MarqueeBandProps) {
   const sequence = [...items, ...items, ...items, ...items]
 
   return (
+    <GyroLayer strength={0.45}>
     <div
       className={cn(
         "relative flex overflow-hidden border-y border-border bg-secondary py-6 select-none",
@@ -69,5 +71,6 @@ export function MarqueeBand({ className, speed = 55 }: MarqueeBandProps) {
         ))}
       </motion.div>
     </div>
+    </GyroLayer>
   )
 }

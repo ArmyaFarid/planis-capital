@@ -32,6 +32,26 @@ export const cardIn: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 1.05, ease: EASE_OUT_QUART } },
 }
 
+/**
+ * Card entrance with depth. Touch loses the pointer-driven 3D tilt entirely, so the
+ * entrance is where mobile gets its sense of dimension instead.
+ */
+export const cardIn3D: Variants = {
+  hidden: { opacity: 0, y: 26, rotateX: 12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    transition: { duration: 1.1, ease: EASE_OUT_QUART },
+  },
+}
+
+/** Press feedback. Touch UI feels dead without it — this is the mobile hover state. */
+export const pressable = {
+  whileTap: { scale: 0.97 },
+  transition: { type: "spring" as const, stiffness: 400, damping: 26 },
+}
+
 /** Headings wipe in under a mask rather than fading — reads as typeset, not as a slide. */
 export const maskUp: Variants = {
   hidden: { opacity: 0, y: "0.25em", clipPath: "inset(0 0 100% 0)" },

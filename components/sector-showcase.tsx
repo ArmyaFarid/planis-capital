@@ -2,10 +2,9 @@
 
 import { useEffect, useRef, useState } from "react"
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react"
-import { RevealGroup, RevealItem } from "@/components/motion/reveal"
 import { TiltCard } from "@/components/motion/tilt-card"
 import { SectorCard, type SectorCardProps } from "./sector-card"
-import { cardIn } from "@/lib/motion"
+import { SectorCarousel } from "./sector-carousel"
 
 interface SectorShowcaseProps {
   sectors: SectorCardProps[]
@@ -49,14 +48,8 @@ export function SectorShowcase({ sectors }: SectorShowcaseProps) {
 
   return (
     <>
-      {/* Mobile / reduced motion: plain grid. */}
-      <RevealGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:hidden" stagger={0.1}>
-        {sectors.map((sector) => (
-          <RevealItem key={sector.title} variants={cardIn}>
-            <SectorCard {...sector} />
-          </RevealItem>
-        ))}
-      </RevealGroup>
+      {/* Touch: a swipeable strip whose centred slide opens, standing in for hover. */}
+      <SectorCarousel sectors={sectors} />
 
       {reduce ? (
         <div className="hidden grid-cols-4 gap-4 lg:grid">

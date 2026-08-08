@@ -4,6 +4,7 @@ import { Mail, Send } from "lucide-react"
 import { ScrambleText } from "@/components/motion/scramble-text"
 import { WeightScroll } from "@/components/motion/weight-scroll"
 import { Reveal } from "@/components/motion/reveal"
+import { GyroLayer } from "@/components/motion/gyro-layer"
 import { Magnetic } from "@/components/motion/magnetic"
 import { AnimatedWords } from "@/components/motion/animated-text"
 import { cardIn } from "@/lib/motion"
@@ -31,6 +32,7 @@ export function ContactSection() {
           </div>
 
           <Reveal delay={0.2} variants={cardIn}>
+            <GyroLayer mode="tilt" strength={0.7}>
             <div className="group bg-primary p-8 text-center md:p-16">
               <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center bg-accent/20 transition-transform duration-500 group-hover:scale-105">
                 <Mail className="h-10 w-10 text-accent" />
@@ -60,6 +62,7 @@ export function ContactSection() {
                 </Magnetic>
               </div>
             </div>
+            </GyroLayer>
           </Reveal>
         </div>
       </div>

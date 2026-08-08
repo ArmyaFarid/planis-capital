@@ -210,6 +210,23 @@
   animation: text-sweep 2.6s var(--ease-out-quart) var(--sweep-delay, 0s) 1 both;
 }
 
+/* Tilt-tracked sheen. Position is driven from JS (GyroSheen); this only supplies the
+   gradient and the text clip. Wide background-size so the highlight has room to travel. */
+@utility gyro-sheen {
+  background-image: linear-gradient(
+    100deg,
+    currentColor 0%,
+    currentColor 34%,
+    color-mix(in srgb, currentColor 45%, white) 50%,
+    currentColor 66%,
+    currentColor 100%
+  );
+  background-size: 260% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
 /* Weight gain on scroll. Instrument Serif ships a single weight, so real axis
    interpolation is not available — stroking the glyph edge thickens any typeface and
    keeps the chosen display face. Set --weight-gain from JS as the element crosses. */

@@ -2,6 +2,7 @@
 
 import { useRef } from "react"
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
+import { useGyroTilt } from "@/lib/use-gyro-tilt"
 import { cn } from "@/lib/utils"
 
 interface KineticWordmarkProps {
@@ -20,6 +21,7 @@ interface KineticWordmarkProps {
 export function KineticWordmark({ text, className }: KineticWordmarkProps) {
   const ref = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
+  const gyro = useGyroTilt(0.6)
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] })
   const x = useTransform(scrollYProgress, [0, 1], ["-14%", "4%"])
@@ -28,7 +30,7 @@ export function KineticWordmark({ text, className }: KineticWordmarkProps) {
   return (
     <div ref={ref} className={cn("pointer-events-none overflow-hidden", className)} aria-hidden="true">
       <motion.div
-        style={reduce ? undefined : { x, opacity }}
+        style={reduce ? undefined : { x, opacity, rotateY: gyro.ry, transformPerspective: 1400 }}
         className="whitespace-nowrap font-serif leading-[0.8] text-primary-foreground/[0.07]"
       >
         <span className="text-[19vw]">{text}</span>

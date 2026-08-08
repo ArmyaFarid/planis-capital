@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react"
 import { animate, useInView, useMotionValue, useReducedMotion, useTransform, motion } from "motion/react"
 import { useLanguage } from "@/lib/language-context"
+import { useGyroTilt } from "@/lib/use-gyro-tilt"
+import { GyroLayer } from "@/components/motion/gyro-layer"
 import { EASE_OUT_EXPO } from "@/lib/motion"
 
 interface Stat {
@@ -72,6 +74,7 @@ function StatValue({ value, suffix }: { value: number | null; suffix?: string })
 export function StatsStrip() {
   const { t } = useLanguage()
   const reduce = useReducedMotion()
+  const gyro = useGyroTilt(0.4)
 
   return (
     <motion.dl
@@ -80,6 +83,7 @@ export function StatsStrip() {
       whileInView="visible"
       viewport={{ once: true, margin: "-10% 0px" }}
       variants={{ visible: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } } }}
+      style={reduce ? undefined : { x: gyro.tx, y: gyro.ty }}
     >
       {STATS.map((stat) => (
         <motion.div

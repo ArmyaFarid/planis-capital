@@ -12,7 +12,8 @@ import { WeightScroll } from "@/components/motion/weight-scroll"
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal"
 import { AnimatedWords } from "@/components/motion/animated-text"
 import { TiltCard } from "@/components/motion/tilt-card"
-import { EASE_OUT_QUART, cardIn } from "@/lib/motion"
+import { GyroLayer } from "@/components/motion/gyro-layer"
+import { EASE_OUT_QUART, cardIn3D } from "@/lib/motion"
 import { useLanguage } from "@/lib/language-context"
 
 export function CriteriaSection() {
@@ -44,7 +45,7 @@ export function CriteriaSection() {
   return (
     <section id="nos-criteres" className="bg-secondary py-24 md:py-32">
       <div className="container mx-auto px-4 md:px-8">
-        <div className="mb-16 max-w-3xl">
+        <div className="sticky top-[4.5rem] z-20 -mx-4 mb-10 max-w-3xl bg-secondary px-4 pb-4 pt-3 lg:static lg:mx-0 lg:mb-16 lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0">
           <Reveal>
             <span className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
               <ScrambleText text={t("criteria.section")} />
@@ -56,9 +57,10 @@ export function CriteriaSection() {
           </WeightScroll>
         </div>
 
-        <RevealGroup className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8" stagger={0.1}>
+        <RevealGroup className="grid grid-cols-1 gap-6 [perspective:1200px] md:grid-cols-2 lg:gap-8" stagger={0.1}>
           {criteria.map((item) => (
-            <RevealItem key={item.title} variants={cardIn} className="h-full">
+            <RevealItem key={item.title} variants={cardIn3D} className="h-full">
+              <GyroLayer mode="tilt" strength={0.55} className="h-full">
               <TiltCard max={6} className="h-full">
               <div className="group h-full border border-transparent bg-background p-8 transition-all duration-500 hover:border-accent/40 hover:shadow-lg md:p-10">
                 <div className="flex items-start gap-6">
@@ -84,6 +86,7 @@ export function CriteriaSection() {
                 </div>
               </div>
               </TiltCard>
+              </GyroLayer>
             </RevealItem>
           ))}
         </RevealGroup>

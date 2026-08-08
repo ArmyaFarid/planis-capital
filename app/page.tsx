@@ -15,6 +15,8 @@ import { CustomCursor } from "@/components/motion/custom-cursor"
 import { MarqueeBand } from "@/components/marquee-band"
 import { GlobeStage } from "@/components/globe/globe-stage"
 import { SectionRail } from "@/components/motion/section-rail"
+import { MobileProgress } from "@/components/motion/mobile-progress"
+import { GyroPrompt } from "@/components/motion/gyro-prompt"
 import { ScrollTint } from "@/components/motion/scroll-tint"
 import { LanguageProvider } from "@/lib/language-context"
 
@@ -26,6 +28,8 @@ export default function HomePage() {
       <CustomCursor />
       <GlobeStage />
       <SectionRail />
+      <MobileProgress />
+      <GyroPrompt />
       <ScrollTint />
       <main className="min-h-screen bg-background">
         <Navigation />

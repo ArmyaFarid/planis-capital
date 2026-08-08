@@ -31,6 +31,9 @@ const translations: Record<Language, Record<string, string>> = {
     "hero.cta1": "Découvrir notre mission",
     "hero.cta2": "Nous contacter",
     "hero.scroll": "Défiler",
+    "gyro.enable": "Activer",
+    "gyro.hint": "Inclinez votre téléphone pour explorer",
+    "gyro.dismiss": "Ignorer",
 
     // Stats — see STATS in components/stats-section.tsx for the values
     "stats.section": "En bref",
@@ -136,6 +139,9 @@ const translations: Record<Language, Record<string, string>> = {
     "hero.cta1": "Discover our mission",
     "hero.cta2": "Contact us",
     "hero.scroll": "Scroll",
+    "gyro.enable": "Enable",
+    "gyro.hint": "Tilt your phone to explore",
+    "gyro.dismiss": "Dismiss",
 
     // Stats — see STATS in components/stats-section.tsx for the values
     "stats.section": "At a glance",

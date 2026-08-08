@@ -5,8 +5,9 @@ import { ArrowUpRight } from "lucide-react"
 import { ScrambleText } from "@/components/motion/scramble-text"
 import { WeightScroll } from "@/components/motion/weight-scroll"
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal"
+import { GyroLayer } from "@/components/motion/gyro-layer"
 import { AnimatedWords } from "@/components/motion/animated-text"
-import { cardIn } from "@/lib/motion"
+import { cardIn3D } from "@/lib/motion"
 import { useLanguage } from "@/lib/language-context"
 import { cn } from "@/lib/utils"
 
@@ -56,10 +57,11 @@ export function PortfolioSection() {
           </Reveal>
         </div>
 
-        <RevealGroup className="mx-auto max-w-4xl" stagger={0.1}>
+        <RevealGroup className="mx-auto max-w-4xl [perspective:1200px]" stagger={0.1}>
           <div className={cn("grid gap-6", isSingle ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2")}>
             {portfolioCompanies.map((company) => (
-              <RevealItem key={company.website} variants={cardIn}>
+              <RevealItem key={company.website} variants={cardIn3D}>
+                <GyroLayer mode="tilt" strength={0.8}>
                 <a
                   href={company.website}
                   target="_blank"
@@ -106,6 +108,7 @@ export function PortfolioSection() {
                     </div>
                   </div>
                 </a>
+                </GyroLayer>
               </RevealItem>
             ))}
           </div>

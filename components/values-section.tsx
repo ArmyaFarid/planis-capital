@@ -6,8 +6,10 @@ import { ScrambleText } from "@/components/motion/scramble-text"
 import { WeightScroll } from "@/components/motion/weight-scroll"
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal"
 import { AnimatedWords } from "@/components/motion/animated-text"
+import { GyroLayer } from "@/components/motion/gyro-layer"
 import { fadeUp } from "@/lib/motion"
 import { useLanguage } from "@/lib/language-context"
+import { useGyroTilt } from "@/lib/use-gyro-tilt"
 
 /**
  * The oversized numeral drifts against the scroll while the card text stays put. It's the
@@ -16,6 +18,7 @@ import { useLanguage } from "@/lib/language-context"
 function ValueCard({ index, title, description }: { index: number; title: string; description: string }) {
   const ref = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
+  const gyro = useGyroTilt(0.9)
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -30,7 +33,7 @@ function ValueCard({ index, title, description }: { index: number; title: string
       <div ref={ref} className="group relative">
         <motion.span
           aria-hidden="true"
-          style={reduce ? undefined : { y, opacity: numberOpacity }}
+          style={reduce ? undefined : { y, opacity: numberOpacity, x: gyro.tx, rotateY: gyro.ry, transformPerspective: 800 }}
           className="block font-serif text-8xl leading-none text-primary-foreground transition-colors duration-500 group-hover:text-accent"
         >
           {String(index + 1).padStart(2, "0")}
@@ -60,7 +63,7 @@ export function ValuesSection() {
   return (
     <section id="nos-valeurs" className="bg-primary py-24 md:py-32">
       <div className="container mx-auto px-4 md:px-8">
-        <div className="mb-16 max-w-3xl">
+        <div className="sticky top-[4.5rem] z-20 -mx-4 mb-10 max-w-3xl bg-primary px-4 pb-4 pt-3 lg:static lg:mx-0 lg:mb-16 lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-0">
           <Reveal>
             <span className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
               <ScrambleText text={t("values.section")} />
@@ -76,11 +79,13 @@ export function ValuesSection() {
           </Reveal>
         </div>
 
+        <GyroLayer strength={0.35}>
         <RevealGroup className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4" stagger={0.1}>
           {values.map((value, index) => (
             <ValueCard key={value.title} index={index} title={value.title} description={value.description} />
           ))}
         </RevealGroup>
+        </GyroLayer>
       </div>
     </section>
   )

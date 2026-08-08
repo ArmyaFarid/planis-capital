@@ -6,10 +6,14 @@ import Link from "next/link"
 import { ChevronDown } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
 import { StatsStrip } from "@/components/stats-strip"
+import { MobileGlobe } from "@/components/globe/mobile-globe"
+import { useGyroTilt } from "@/lib/use-gyro-tilt"
 import { AnimatedChars } from "@/components/motion/animated-text"
+import { GyroSheen } from "@/components/motion/gyro-layer"
 import { Magnetic } from "@/components/motion/magnetic"
 import { EASE_OUT_QUART } from "@/lib/motion"
 import { useLanguage } from "@/lib/language-context"
+import { cn } from "@/lib/utils"
 
 // Swap in a dedicated hero shot by editing this array — nothing else depends on the count.
 // Specs for a replacement: landscape, >=2400px wide, dark/low-key so the scrim stays readable.
@@ -21,18 +25,29 @@ const HERO_IMAGES = [
 
 const SLIDE_MS = 7000
 
-function HeroBackdrop() {
-  const [index, setIndex] = useState(0)
+function HeroBackdrop({
+  index,
+  setIndex,
+}: {
+  index: number
+  setIndex: (updater: (i: number) => number) => void
+}) {
   const reduce = useReducedMotion()
 
   useEffect(() => {
     if (reduce || HERO_IMAGES.length < 2) return
     const id = setInterval(() => setIndex((i) => (i + 1) % HERO_IMAGES.length), SLIDE_MS)
     return () => clearInterval(id)
-  }, [reduce])
+  }, [reduce, setIndex])
+
+  // Slowest layer: a large background should barely move, or the depth illusion inverts.
+  const tilt = useGyroTilt(0.9)
 
   return (
-    <div className="absolute inset-0 overflow-hidden">
+    <motion.div
+      className="absolute inset-0 overflow-hidden"
+      style={reduce ? undefined : { x: tilt.tx, y: tilt.ty, scale: 1.06 }}
+    >
       {HERO_IMAGES.map((src, i) => (
         <motion.div
           key={src}
@@ -62,13 +77,17 @@ function HeroBackdrop() {
       {/* Scrim. The photo is texture — it must never compete with the headline. */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#0A1628]/96 via-[#16294A]/88 to-[#0A1628]/96" />
       <div className="absolute inset-0 bg-gradient-to-b from-[#0A1628]/85 via-transparent to-[#0A1628]" />
-    </div>
+    </motion.div>
   )
 }
 
 export function HeroSection() {
   const { t } = useLanguage()
   const reduce = useReducedMotion()
+  const [slide, setSlide] = useState(0)
+  // Faintest layer. Copy that swims makes text hard to read — this is barely perceptible
+  // on its own, and only reads as depth against the backdrop and globe moving more.
+  const copyTilt = useGyroTilt(0.5)
 
   const container = {
     hidden: {},
@@ -81,12 +100,33 @@ export function HeroSection() {
 
   return (
     <section className="relative flex min-h-[100svh] w-full flex-col overflow-hidden bg-primary">
-      <HeroBackdrop />
+      <HeroBackdrop index={slide} setIndex={setSlide} />
+
+      {/* Mobile globe. Positioned behind the copy rather than stacked below it: phone
+          heroes have no spare vertical room, and the 2D globe costs no GPU or bandwidth
+          (see GlobeStage for the desktop 3D one). */}
+      <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center lg:hidden">
+        <MobileGlobe />
+      </div>
 
       <div className="container relative z-10 mx-auto flex flex-1 items-center px-4 pt-28 pb-10 md:px-8 md:pt-32 md:pb-14">
         <div className="grid w-full items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:gap-16 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
           {/* Copy */}
-          <motion.div initial={reduce ? false : "hidden"} animate="visible" variants={container}>
+          <motion.div
+            initial={reduce ? false : "hidden"}
+            animate="visible"
+            variants={container}
+            style={
+              reduce
+                ? undefined
+                : {
+                    x: copyTilt.tx,
+                    y: copyTilt.ty,
+                    rotateY: copyTilt.ry,
+                    transformPerspective: 1200,
+                  }
+            }
+          >
             <motion.p
               variants={item}
               className="mb-5 text-sm font-semibold uppercase tracking-[0.3em] text-accent md:text-base"
@@ -95,7 +135,11 @@ export function HeroSection() {
             </motion.p>
 
             <h1 className="font-serif text-display text-primary-foreground">
-              <AnimatedChars text={t("hero.title1")} />
+              {/* Sheen goes on title1: title2 already runs the one-shot text-sweep, and
+                  two animations driving background-position would fight. */}
+              <GyroSheen>
+                <AnimatedChars text={t("hero.title1")} />
+              </GyroSheen>
               <br />
               <AnimatedChars text={t("hero.title2")} className="text-accent" sweep />
             </h1>
@@ -127,6 +171,22 @@ export function HeroSection() {
                 </Link>
               </Magnetic>
             </motion.div>
+
+            {/* In flow, not absolutely positioned: at bottom-[8.5rem] these pills landed
+                on top of the stat strip and read as stray dashes beside its labels. */}
+            <div className="mt-8 flex gap-2 lg:hidden">
+              {HERO_IMAGES.map((src, i) => (
+                <button
+                  key={src}
+                  onClick={() => setSlide(() => i)}
+                  aria-label={`Image ${i + 1}`}
+                  className={cn(
+                    "h-1 rounded-full transition-all duration-500",
+                    i === slide ? "w-6 bg-accent" : "w-3 bg-primary-foreground/30",
+                  )}
+                />
+              ))}
+            </div>
           </motion.div>
 
           {/* The globe lives in GlobeStage (fixed, persists across sections). This column
@@ -134,6 +194,20 @@ export function HeroSection() {
           <div className="hidden lg:block" aria-hidden="true" />
         </div>
       </div>
+
+      {/* Swipe layer: drag horizontally to change the backdrop. Sits above the art but
+          below the copy, and only on touch, so it never intercepts CTA taps. */}
+      <motion.div
+        className="absolute inset-0 z-[2] lg:hidden"
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0.12}
+        onDragEnd={(_, info) => {
+          if (Math.abs(info.offset.x) < 60) return
+          const dir = info.offset.x < 0 ? 1 : -1
+          setSlide((i) => (i + dir + HERO_IMAGES.length) % HERO_IMAGES.length)
+        }}
+      />
 
       {/* Stat band + scroll cue */}
       <div className="container relative z-10 mx-auto px-4 pb-8 md:px-8">
