@@ -1,9 +1,11 @@
 "use client"
 
+import { ScrambleText } from "@/components/motion/scramble-text"
+import { WeightScroll } from "@/components/motion/weight-scroll"
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal"
 import { AnimatedParagraph, AnimatedRule, AnimatedWords } from "@/components/motion/animated-text"
-import { TiltCard } from "@/components/motion/tilt-card"
-import { SectorCard, type SectorCardProps } from "./sector-card"
+import { type SectorCardProps } from "./sector-card"
+import { SectorShowcase } from "./sector-showcase"
 import { cardIn } from "@/lib/motion"
 import { useLanguage } from "@/lib/language-context"
 
@@ -44,13 +46,13 @@ export function AboutSection() {
         <div className="mx-auto mb-24 max-w-4xl text-center">
           <Reveal>
             <span className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-              {t("about.section")}
+              <ScrambleText text={t("about.section")} />
             </span>
           </Reveal>
 
-          <h2 className="mt-6 mb-8 font-serif text-h2 text-balance text-foreground">
+          <WeightScroll as="h2" className="mt-6 mb-8 font-serif text-h2 text-balance text-foreground">
             <AnimatedWords text={t("about.title")} trigger="view" />
-          </h2>
+          </WeightScroll>
 
           <AnimatedParagraph
             text={t("about.p1")}
@@ -73,15 +75,7 @@ export function AboutSection() {
             </h3>
           </div>
 
-          <RevealGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4" stagger={0.1}>
-            {sectors.map((sector) => (
-              <RevealItem key={sector.title} variants={cardIn}>
-                <TiltCard max={7}>
-                  <SectorCard {...sector} />
-                </TiltCard>
-              </RevealItem>
-            ))}
-          </RevealGroup>
+          <SectorShowcase sectors={sectors} />
         </div>
       </div>
     </section>

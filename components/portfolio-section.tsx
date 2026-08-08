@@ -2,6 +2,8 @@
 
 import Image from "next/image"
 import { ArrowUpRight } from "lucide-react"
+import { ScrambleText } from "@/components/motion/scramble-text"
+import { WeightScroll } from "@/components/motion/weight-scroll"
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal"
 import { AnimatedWords } from "@/components/motion/animated-text"
 import { cardIn } from "@/lib/motion"
@@ -39,13 +41,13 @@ export function PortfolioSection() {
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <Reveal>
             <span className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-              {t("portfolio.section")}
+              <ScrambleText text={t("portfolio.section")} />
             </span>
           </Reveal>
 
-          <h2 className="mt-6 font-serif text-h2 text-balance text-foreground">
+          <WeightScroll as="h2" className="mt-6 font-serif text-h2 text-balance text-foreground">
             <AnimatedWords text={t("portfolio.title")} trigger="view" />
-          </h2>
+          </WeightScroll>
 
           <Reveal delay={0.2}>
             <p className="mt-6 text-lead text-pretty text-muted-foreground">

@@ -18,6 +18,27 @@ const RADIUS = 1
  */
 const AFRICA_FACING = THREE.MathUtils.degToRad(-110)
 
+/**
+ * Rotation that brings an arbitrary longitude to face the camera. Same derivation as
+ * AFRICA_FACING generalised: longitude -90 already faces +Z, so the group carries the
+ * remainder. Sanity check: lng 20 -> -110, which is AFRICA_FACING.
+ */
+function facingRotationFor(lng: number) {
+  return THREE.MathUtils.degToRad(-(lng + 90))
+}
+
+/** Rotation that lifts a latitude to the centre of the facing hemisphere. */
+function tiltFor(lat: number) {
+  return THREE.MathUtils.degToRad(lat)
+}
+
+export interface GlobeFocus {
+  lat: number
+  lng: number
+  /** Index into GLOBE_CITIES to ignite, or -1 for none. */
+  city: number
+}
+
 function latLngToVec3(lat: number, lng: number, radius = RADIUS) {
   const phi = ((90 - lat) * Math.PI) / 180
   const theta = ((lng + 180) * Math.PI) / 180
@@ -135,33 +156,44 @@ function Atmosphere() {
   return <mesh scale={1.08} geometry={geometry} material={material} renderOrder={-1} />
 }
 
-function CityMarkers() {
+function CityMarkers({ focusRef }: { focusRef: React.RefObject<GlobeFocus | null> }) {
   const ringsRef = useRef<THREE.Group>(null)
+  const dotsRef = useRef<THREE.Group>(null)
 
   useFrame(({ clock }) => {
     if (!ringsRef.current) return
     const t = clock.getElapsedTime()
+    const focused = focusRef.current?.city ?? -1
+
     ringsRef.current.children.forEach((ring, i) => {
-      // Staggered outward pulse, restarting per marker.
-      const phase = (t * 0.55 + i * 0.22) % 1
-      const s = 1 + phase * 2.6
-      ring.scale.setScalar(s)
+      // Staggered outward pulse, restarting per marker. The focused city pulses faster
+      // and brighter so the section it belongs to is unmistakable.
+      const hot = i === focused
+      const phase = (t * (hot ? 0.95 : 0.55) + i * 0.22) % 1
+      ring.scale.setScalar(1 + phase * (hot ? 4 : 2.6))
       const mat = (ring as THREE.Mesh).material as THREE.MeshBasicMaterial
-      mat.opacity = (1 - phase) * 0.55
+      mat.opacity = (1 - phase) * (hot ? 0.9 : 0.4)
+    })
+
+    dotsRef.current?.children.forEach((dot, i) => {
+      const target = i === focused ? 1.9 : 1
+      dot.scale.setScalar(THREE.MathUtils.lerp(dot.scale.x, target, 0.08))
     })
   })
 
   return (
     <group>
-      {GLOBE_CITIES.map((city) => {
-        const pos = latLngToVec3(city.lat, city.lng, RADIUS * 1.015)
-        return (
-          <mesh key={city.name} position={pos}>
-            <sphereGeometry args={[0.012, 12, 12]} />
-            <meshBasicMaterial color={FOREGROUND} toneMapped={false} />
-          </mesh>
-        )
-      })}
+      <group ref={dotsRef}>
+        {GLOBE_CITIES.map((city) => {
+          const pos = latLngToVec3(city.lat, city.lng, RADIUS * 1.015)
+          return (
+            <mesh key={city.name} position={pos}>
+              <sphereGeometry args={[0.012, 12, 12]} />
+              <meshBasicMaterial color={FOREGROUND} toneMapped={false} />
+            </mesh>
+          )
+        })}
+      </group>
 
       <group ref={ringsRef}>
         {GLOBE_CITIES.map((city) => {
@@ -242,12 +274,21 @@ function Arcs() {
   )
 }
 
-function Globe({ scrollRef, onReady }: { scrollRef: React.RefObject<number>; onReady?: () => void }) {
+function Globe({
+  scrollRef,
+  focusRef,
+  onReady,
+}: {
+  scrollRef: React.RefObject<number>
+  focusRef: React.RefObject<GlobeFocus | null>
+  onReady?: () => void
+}) {
   const groupRef = useRef<THREE.Group>(null)
   const dragRef = useRef({ active: false, lastX: 0, velocity: 0, offset: 0 })
   const framesRef = useRef(0)
+  const leanRef = useRef({ x: 0, y: 0 })
 
-  useFrame((_, delta) => {
+  useFrame(({ pointer }, delta) => {
     const g = groupRef.current
     if (!g) return
 
@@ -257,17 +298,36 @@ function Globe({ scrollRef, onReady }: { scrollRef: React.RefObject<number>; onR
     if (framesRef.current === 2) onReady?.()
 
     const drag = dragRef.current
+    const focus = focusRef.current
 
-    if (!drag.active) {
-      // Idle spin, plus whatever momentum is left from the last drag.
+    if (!drag.active && !focus) {
+      // Idle spin, plus whatever momentum is left from the last drag. Suspended while a
+      // section owns the globe, otherwise the spin fights the fly-to.
       drag.offset += delta * 0.075 + drag.velocity
       drag.velocity *= 0.94
     }
 
-    g.rotation.y = AFRICA_FACING + drag.offset
-    // Tip away slightly as the hero scrolls out, so the globe reacts to the page.
-    g.rotation.x = THREE.MathUtils.lerp(g.rotation.x, 0.18 + scrollRef.current * 0.5, 0.06)
-    g.position.y = THREE.MathUtils.lerp(g.position.y, scrollRef.current * 0.55, 0.06)
+    // Pointer lean, damped and additive — the globe leans toward the cursor without ever
+    // fighting the drag offset or the idle spin, so it feels responsive before you touch it.
+    // R3F's `pointer` is already normalised to -1..1 and stays put when the mouse leaves.
+    leanRef.current.y = THREE.MathUtils.lerp(leanRef.current.y, pointer.x * 0.32, 0.045)
+    leanRef.current.x = THREE.MathUtils.lerp(leanRef.current.x, -pointer.y * 0.18, 0.045)
+
+    if (focus && !drag.active) {
+      // Ease toward the section's city. Unwrapped so it always takes the short way round
+      // rather than spinning the long way when crossing the -180/180 seam.
+      const target = facingRotationFor(focus.lng)
+      const current = AFRICA_FACING + drag.offset
+      let diff = target - current
+      diff = Math.atan2(Math.sin(diff), Math.cos(diff))
+      drag.offset += diff * 0.045
+    }
+
+    g.rotation.y = AFRICA_FACING + drag.offset + leanRef.current.y
+
+    const targetTilt = focus ? tiltFor(focus.lat) * 0.75 : 0.18 + scrollRef.current * 0.5
+    g.rotation.x = THREE.MathUtils.lerp(g.rotation.x, targetTilt + leanRef.current.x, 0.05)
+    g.position.y = THREE.MathUtils.lerp(g.position.y, focus ? 0 : scrollRef.current * 0.35, 0.06)
   })
 
   const onPointerDown = (e: ThreeEvent<PointerEvent>) => {
@@ -309,7 +369,7 @@ function Globe({ scrollRef, onReady }: { scrollRef: React.RefObject<number>; onR
       <LandPoints data={WORLD_POINTS} color="#7C9AC4" size={0.019} opacity={0.55} />
       <LandPoints data={AFRICA_POINTS} color="#E4573D" size={0.032} opacity={1} />
 
-      <CityMarkers />
+      <CityMarkers focusRef={focusRef} />
       <Arcs />
       <Atmosphere />
     </group>
@@ -318,9 +378,11 @@ function Globe({ scrollRef, onReady }: { scrollRef: React.RefObject<number>; onR
 
 export default function GlobeScene({
   scrollRef,
+  focusRef,
   onReady,
 }: {
   scrollRef: React.RefObject<number>
+  focusRef: React.RefObject<GlobeFocus | null>
   onReady?: () => void
 }) {
   return (
@@ -339,7 +401,7 @@ export default function GlobeScene({
       }}
       style={{ background: "transparent", touchAction: "pan-y" }}
     >
-      <Globe scrollRef={scrollRef} onReady={onReady} />
+      <Globe scrollRef={scrollRef} focusRef={focusRef} onReady={onReady} />
     </Canvas>
   )
 }

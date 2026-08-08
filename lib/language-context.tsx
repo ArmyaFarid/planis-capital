@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react"
+import { flushSync } from "react-dom"
 
 type Language = "fr" | "en"
 
@@ -246,8 +247,22 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   // Persist on the action, not in an effect — an effect would write the default "fr"
   // on mount and clobber the stored choice before the read above lands.
   const setLanguage = (lang: Language) => {
-    setLanguageState(lang)
-    window.localStorage.setItem(STORAGE_KEY, lang)
+    const apply = () => {
+      setLanguageState(lang)
+      window.localStorage.setItem(STORAGE_KEY, lang)
+    }
+
+    // Crossfade the whole document through the View Transitions API where supported.
+    // flushSync is required: startViewTransition snapshots the DOM when the callback
+    // returns, and React's async rendering would otherwise not have committed yet.
+    const doc = document as Document & {
+      startViewTransition?: (cb: () => void) => { finished: Promise<void> }
+    }
+    if (typeof doc.startViewTransition === "function") {
+      doc.startViewTransition(() => flushSync(apply))
+      return
+    }
+    apply()
   }
 
   const t = (key: string): string => {

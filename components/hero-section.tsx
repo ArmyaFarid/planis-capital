@@ -5,9 +5,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { ChevronDown } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
-import { HeroGlobe } from "@/components/globe/hero-globe"
 import { StatsStrip } from "@/components/stats-strip"
-import { AnimatedWords } from "@/components/motion/animated-text"
+import { AnimatedChars } from "@/components/motion/animated-text"
 import { Magnetic } from "@/components/motion/magnetic"
 import { EASE_OUT_QUART } from "@/lib/motion"
 import { useLanguage } from "@/lib/language-context"
@@ -96,9 +95,9 @@ export function HeroSection() {
             </motion.p>
 
             <h1 className="font-serif text-display text-primary-foreground">
-              <AnimatedWords text={t("hero.title1")} />
+              <AnimatedChars text={t("hero.title1")} />
               <br />
-              <AnimatedWords text={t("hero.title2")} className="text-accent" />
+              <AnimatedChars text={t("hero.title2")} className="text-accent" sweep />
             </h1>
 
             <motion.p
@@ -130,11 +129,9 @@ export function HeroSection() {
             </motion.div>
           </motion.div>
 
-          {/* 3D globe. Hidden below lg — at phone widths it only ever fights the copy,
-              and it's the most expensive thing on the page. */}
-          <div className="hidden justify-center lg:flex">
-            <HeroGlobe />
-          </div>
+          {/* The globe lives in GlobeStage (fixed, persists across sections). This column
+              is reserved so the copy never runs under it. */}
+          <div className="hidden lg:block" aria-hidden="true" />
         </div>
       </div>
 

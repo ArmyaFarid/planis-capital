@@ -1,6 +1,8 @@
 "use client"
 
 import { Mail, Send } from "lucide-react"
+import { ScrambleText } from "@/components/motion/scramble-text"
+import { WeightScroll } from "@/components/motion/weight-scroll"
 import { Reveal } from "@/components/motion/reveal"
 import { Magnetic } from "@/components/motion/magnetic"
 import { AnimatedWords } from "@/components/motion/animated-text"
@@ -19,13 +21,13 @@ export function ContactSection() {
           <div className="mb-16 text-center">
             <Reveal>
               <span className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-                {t("contact.section")}
+                <ScrambleText text={t("contact.section")} />
               </span>
             </Reveal>
 
-            <h2 className="mt-6 font-serif text-h2 text-balance text-foreground">
+            <WeightScroll as="h2" className="mt-6 font-serif text-h2 text-balance text-foreground">
               <AnimatedWords text={t("contact.title")} trigger="view" />
-            </h2>
+            </WeightScroll>
           </div>
 
           <Reveal delay={0.2} variants={cardIn}>

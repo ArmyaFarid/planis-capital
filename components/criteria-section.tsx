@@ -1,7 +1,14 @@
 "use client"
 
-import { Banknote, Globe, Target, TrendingUp } from "lucide-react"
 import { motion } from "motion/react"
+import {
+  LeverageDiagram,
+  MajorityDiagram,
+  MarketDiagram,
+  ProfitabilityDiagram,
+} from "@/components/criteria-diagrams"
+import { ScrambleText } from "@/components/motion/scramble-text"
+import { WeightScroll } from "@/components/motion/weight-scroll"
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal"
 import { AnimatedWords } from "@/components/motion/animated-text"
 import { TiltCard } from "@/components/motion/tilt-card"
@@ -13,22 +20,22 @@ export function CriteriaSection() {
 
   const criteria = [
     {
-      icon: Target,
+      Diagram: MajorityDiagram,
       title: t("criteria.majority"),
       description: t("criteria.majority.desc"),
     },
     {
-      icon: TrendingUp,
+      Diagram: ProfitabilityDiagram,
       title: t("criteria.profitability"),
       description: t("criteria.profitability.desc"),
     },
     {
-      icon: Globe,
+      Diagram: MarketDiagram,
       title: t("criteria.market"),
       description: t("criteria.market.desc"),
     },
     {
-      icon: Banknote,
+      Diagram: LeverageDiagram,
       title: t("criteria.leverage"),
       description: t("criteria.leverage.desc"),
     },
@@ -40,13 +47,13 @@ export function CriteriaSection() {
         <div className="mb-16 max-w-3xl">
           <Reveal>
             <span className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-              {t("criteria.section")}
+              <ScrambleText text={t("criteria.section")} />
             </span>
           </Reveal>
 
-          <h2 className="mt-6 font-serif text-h2 text-balance text-foreground">
+          <WeightScroll as="h2" className="mt-6 font-serif text-h2 text-balance text-foreground">
             <AnimatedWords text={t("criteria.title")} trigger="view" />
-          </h2>
+          </WeightScroll>
         </div>
 
         <RevealGroup className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8" stagger={0.1}>
@@ -66,7 +73,7 @@ export function CriteriaSection() {
                       },
                     }}
                   >
-                    <item.icon className="h-7 w-7 text-primary transition-all duration-500 group-hover:scale-110 group-hover:text-accent" />
+                    <item.Diagram />
                   </motion.div>
                   <div>
                     <h3 className="mb-4 font-sans text-h3 font-semibold tracking-tight text-foreground">

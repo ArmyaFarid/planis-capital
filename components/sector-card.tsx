@@ -41,6 +41,17 @@ export function SectorCard({
       viewport={VIEWPORT}
       transition={{ duration: 1.2, ease: EASE_OUT_QUART }}
     >
+      {/* Second layer: an accent panel that rides up out of the frame just behind the
+          card's own reveal, so the image is uncovered rather than simply faded in. */}
+      {reduce ? null : (
+        <motion.div
+          className="absolute inset-0 z-20 bg-accent"
+          initial={{ y: "0%" }}
+          whileInView={{ y: "-100%" }}
+          viewport={VIEWPORT}
+          transition={{ duration: 1, ease: EASE_OUT_QUART, delay: 0.25 }}
+        />
+      )}
       <motion.div className="absolute inset-[-8%]" style={reduce ? undefined : { y: imageY }}>
         {image ? (
           <Image
@@ -48,7 +59,7 @@ export function SectorCard({
             alt={title}
             fill
             sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+            className="object-cover saturate-[0.55] transition-all duration-700 ease-out can-hover:group-hover:scale-110 can-hover:group-hover:saturate-100"
           />
         ) : (
           // TODO(client): supply a photo for this sector; until then the card holds its

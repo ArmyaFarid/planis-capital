@@ -2,6 +2,8 @@
 
 import { useRef } from "react"
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
+import { ScrambleText } from "@/components/motion/scramble-text"
+import { WeightScroll } from "@/components/motion/weight-scroll"
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal"
 import { AnimatedWords } from "@/components/motion/animated-text"
 import { fadeUp } from "@/lib/motion"
@@ -61,13 +63,13 @@ export function ValuesSection() {
         <div className="mb-16 max-w-3xl">
           <Reveal>
             <span className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-              {t("values.section")}
+              <ScrambleText text={t("values.section")} />
             </span>
           </Reveal>
 
-          <h2 className="mt-6 font-serif text-h2 text-balance text-primary-foreground">
+          <WeightScroll as="h2" className="mt-6 font-serif text-h2 text-balance text-primary-foreground">
             <AnimatedWords text={t("values.title")} trigger="view" />
-          </h2>
+          </WeightScroll>
 
           <Reveal delay={0.2}>
             <p className="mt-6 text-lead text-primary-foreground/70">{t("values.subtitle")}</p>

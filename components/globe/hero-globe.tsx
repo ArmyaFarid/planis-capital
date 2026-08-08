@@ -5,6 +5,7 @@ import dynamic from "next/dynamic"
 import { motion, useReducedMotion } from "motion/react"
 import { GlobeFallback } from "./globe-fallback"
 import { WebGLBoundary } from "./webgl-boundary"
+import type { GlobeFocus } from "./globe-scene"
 import { cn } from "@/lib/utils"
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -23,13 +24,19 @@ type Status = "probing" | "ok" | "fallback"
 
 interface HeroGlobeProps {
   className?: string
+  /** Section-driven target; null lets the globe idle-spin. */
+  focusRef?: React.RefObject<GlobeFocus | null>
 }
 
-export function HeroGlobe({ className }: HeroGlobeProps) {
+export function HeroGlobe({ className, focusRef }: HeroGlobeProps) {
   const reduce = useReducedMotion()
   const [status, setStatus] = useState<Status>("probing")
   const [sceneReady, setSceneReady] = useState(false)
   const scrollRef = useRef(0)
+  // Own ref when no stage drives us, so GlobeScene always has a stable target.
+  const ownFocus = useRef<GlobeFocus | null>(null)
+
+  const idleFocus = focusRef ?? ownFocus
 
   const fail = useCallback(() => {
     setSceneReady(false)
@@ -121,7 +128,7 @@ export function HeroGlobe({ className }: HeroGlobeProps) {
       >
         {status === "ok" ? (
           <WebGLBoundary fallback={null} onError={fail}>
-            <GlobeScene scrollRef={scrollRef} onReady={handleSceneReady} />
+            <GlobeScene scrollRef={scrollRef} focusRef={idleFocus} onReady={handleSceneReady} />
           </WebGLBoundary>
         ) : null}
       </motion.div>

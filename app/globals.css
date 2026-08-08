@@ -182,6 +182,43 @@
   animation: route-pulse 3.4s linear infinite;
 }
 
+/* Accent highlight sweeping across a headline after its characters have landed.
+   background-clip:text needs a transparent fill, so the base colour is carried by the
+   gradient's own end stops rather than by `color`. */
+@keyframes text-sweep {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@utility text-sweep {
+  background-image: linear-gradient(
+    100deg,
+    currentColor 0%,
+    currentColor 38%,
+    color-mix(in srgb, var(--foreground) 85%, var(--accent)) 50%,
+    currentColor 62%,
+    currentColor 100%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: text-sweep 2.6s var(--ease-out-quart) var(--sweep-delay, 0s) 1 both;
+}
+
+/* Weight gain on scroll. Instrument Serif ships a single weight, so real axis
+   interpolation is not available — stroking the glyph edge thickens any typeface and
+   keeps the chosen display face. Set --weight-gain from JS as the element crosses. */
+@utility weight-scroll {
+  -webkit-text-stroke-width: calc(var(--weight-gain, 0) * 0.7px);
+  -webkit-text-stroke-color: currentColor;
+  paint-order: stroke fill;
+}
+
 /* The curtain ships in the server-rendered HTML so it covers the first paint. When the
    blocking script in layout.tsx decides this load doesn't get one, this hides it before
    anything is painted — React then unmounts it on hydration. */
@@ -246,5 +283,20 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Language toggle crossfade. Only the outgoing/incoming snapshots are animated, so the
+   layout never shifts — the two languages have different text lengths. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.42s;
+  animation-timing-function: var(--ease-out-quart);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
   }
 }

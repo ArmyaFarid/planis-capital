@@ -1,6 +1,8 @@
 "use client"
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { ScrambleText } from "@/components/motion/scramble-text"
+import { WeightScroll } from "@/components/motion/weight-scroll"
 import { Reveal } from "@/components/motion/reveal"
 import { AnimatedWords } from "@/components/motion/animated-text"
 import { useLanguage } from "@/lib/language-context"
@@ -18,13 +20,13 @@ export function PolicySection() {
         <div className="mx-auto max-w-3xl">
           <Reveal>
             <span className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-              {t("policy.section")}
+              <ScrambleText text={t("policy.section")} />
             </span>
           </Reveal>
 
-          <h2 className="mt-6 font-serif text-h2 text-balance text-foreground">
+          <WeightScroll as="h2" className="mt-6 font-serif text-h2 text-balance text-foreground">
             <AnimatedWords text={t("policy.title")} trigger="view" />
-          </h2>
+          </WeightScroll>
 
           <Reveal delay={0.2}>
             <p className="mt-6 text-lead text-pretty text-muted-foreground">{t("policy.intro")}</p>

@@ -3,6 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal"
+import { KineticWordmark } from "@/components/motion/kinetic-wordmark"
 import { useLanguage } from "@/lib/language-context"
 
 export function Footer() {
@@ -21,7 +22,7 @@ export function Footer() {
   ]
 
   return (
-    <footer className="bg-primary py-16">
+    <footer className="relative overflow-hidden bg-primary pt-16">
       <div className="container mx-auto px-4 md:px-8">
         <RevealGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12" stagger={0.12}>
           {/* Logo & Description */}
@@ -93,6 +94,8 @@ export function Footer() {
           </a>
         </Reveal>
       </div>
+
+      <KineticWordmark text="PLANIS CAPITAL" className="mt-10" />
     </footer>
   )
 }
