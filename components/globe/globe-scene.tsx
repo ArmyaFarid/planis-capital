@@ -60,34 +60,41 @@ function LandPoints({
 }) {
   const texture = useDotTexture()
 
-  const positions = useMemo(() => {
+  // Built imperatively rather than via <bufferAttribute attach="...">: the declarative
+  // form leaves the bounding sphere unset until first render, and a Points object whose
+  // bounding sphere resolves oddly gets frustum-culled and silently never appears.
+  const geometry = useMemo(() => {
     const arr = new Float32Array((data.length / 2) * 3)
     for (let i = 0; i < data.length; i += 2) {
-      const v = latLngToVec3(data[i], data[i + 1], RADIUS * 1.002)
+      const v = latLngToVec3(data[i], data[i + 1], RADIUS * 1.004)
       arr[(i / 2) * 3] = v.x
       arr[(i / 2) * 3 + 1] = v.y
       arr[(i / 2) * 3 + 2] = v.z
     }
-    return arr
+    const geo = new THREE.BufferGeometry()
+    geo.setAttribute("position", new THREE.BufferAttribute(arr, 3))
+    geo.computeBoundingSphere()
+    return geo
   }, [data])
 
-  return (
-    <points>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-      </bufferGeometry>
-      <pointsMaterial
-        map={texture}
-        color={color}
-        size={size}
-        sizeAttenuation
-        transparent
-        opacity={opacity}
-        depthWrite={false}
-        alphaTest={0.01}
-      />
-    </points>
+  const material = useMemo(
+    () =>
+      new THREE.PointsMaterial({
+        map: texture,
+        color: new THREE.Color(color),
+        size,
+        sizeAttenuation: true,
+        transparent: true,
+        opacity,
+        depthWrite: false,
+        // No alphaTest: it clips the soft edge of the sprite and makes dots look chipped.
+        toneMapped: false,
+      }),
+    [texture, color, size, opacity],
   )
+
+  return <points geometry={geometry} material={material} frustumCulled={false} />
+
 }
 
 /** Rim light that falls off toward the centre — cheap fake atmosphere. */
@@ -107,8 +114,12 @@ function Atmosphere() {
           uniform vec3 uColor;
           varying vec3 vNormal;
           void main() {
-            float intensity = pow(0.62 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 3.0);
-            gl_FragColor = vec4(uColor, 1.0) * intensity;
+            // Clamped: on a back-side sphere the dot goes negative across most of the
+            // surface, so an unclamped pow blows past 1 and fills the canvas with a bright
+            // wash instead of hugging the rim.
+            float rim = clamp(0.62 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 0.0, 1.0);
+            float intensity = pow(rim, 4.0) * 0.85;
+            gl_FragColor = vec4(uColor * intensity, intensity);
           }
         `,
         side: THREE.BackSide,
@@ -119,7 +130,9 @@ function Atmosphere() {
     [],
   )
 
-  return <mesh scale={1.22} geometry={new THREE.SphereGeometry(RADIUS, 64, 64)} material={material} />
+  const geometry = useMemo(() => new THREE.SphereGeometry(RADIUS, 48, 48), [])
+
+  return <mesh scale={1.08} geometry={geometry} material={material} renderOrder={-1} />
 }
 
 function CityMarkers() {
@@ -229,13 +242,20 @@ function Arcs() {
   )
 }
 
-function Globe({ scrollRef }: { scrollRef: React.RefObject<number> }) {
+function Globe({ scrollRef, onReady }: { scrollRef: React.RefObject<number>; onReady?: () => void }) {
   const groupRef = useRef<THREE.Group>(null)
   const dragRef = useRef({ active: false, lastX: 0, velocity: 0, offset: 0 })
+  const framesRef = useRef(0)
 
   useFrame((_, delta) => {
     const g = groupRef.current
     if (!g) return
+
+    // Signal on the second frame: the first has been submitted but not necessarily
+    // painted, and fading in too early shows an empty canvas.
+    framesRef.current += 1
+    if (framesRef.current === 2) onReady?.()
+
     const drag = dragRef.current
 
     if (!drag.active) {
@@ -277,17 +297,17 @@ function Globe({ scrollRef }: { scrollRef: React.RefObject<number> }) {
       {/* Dark body so land dots read against it and the far side is occluded. */}
       <mesh>
         <sphereGeometry args={[RADIUS * 0.995, 64, 64]} />
-        <meshBasicMaterial color="#0B1A30" />
+        <meshBasicMaterial color="#0C1D36" />
       </mesh>
 
       {/* Faint graticule for a sense of rotation even over empty ocean. */}
       <mesh>
         <sphereGeometry args={[RADIUS * 0.998, 36, 24]} />
-        <meshBasicMaterial color="#1E3556" wireframe transparent opacity={0.35} />
+        <meshBasicMaterial color="#22406A" wireframe transparent opacity={0.22} />
       </mesh>
 
-      <LandPoints data={WORLD_POINTS} color="#6B87AD" size={0.016} opacity={0.5} />
-      <LandPoints data={AFRICA_POINTS} color={ACCENT} size={0.026} opacity={1} />
+      <LandPoints data={WORLD_POINTS} color="#7C9AC4" size={0.019} opacity={0.55} />
+      <LandPoints data={AFRICA_POINTS} color="#E4573D" size={0.032} opacity={1} />
 
       <CityMarkers />
       <Arcs />
@@ -296,15 +316,30 @@ function Globe({ scrollRef }: { scrollRef: React.RefObject<number> }) {
   )
 }
 
-export default function GlobeScene({ scrollRef }: { scrollRef: React.RefObject<number> }) {
+export default function GlobeScene({
+  scrollRef,
+  onReady,
+}: {
+  scrollRef: React.RefObject<number>
+  onReady?: () => void
+}) {
   return (
     <Canvas
-      camera={{ position: [0, 0, 3.05], fov: 38 }}
+      // Framing budget: globe fills 83% of the frame, halo 90%. Closer than this and the
+      // halo clips into a square again (it hit 108% at z=3.05); further and the globe
+      // reads small. Paired with atmosphere scale 1.08 — the two move together.
+      camera={{ position: [0, 0, 3.5], fov: 38 }}
       dpr={[1, 2]}
-      gl={{ antialias: true, alpha: true }}
-      style={{ touchAction: "pan-y" }}
+      gl={{ antialias: true, alpha: true, premultipliedAlpha: false }}
+      // Clear to fully transparent explicitly. Without this the canvas paints its own
+      // opaque ground and reads as a dark square sitting over the hero.
+      onCreated={({ gl }) => {
+        gl.setClearColor(0x000000, 0)
+        gl.setClearAlpha(0)
+      }}
+      style={{ background: "transparent", touchAction: "pan-y" }}
     >
-      <Globe scrollRef={scrollRef} />
+      <Globe scrollRef={scrollRef} onReady={onReady} />
     </Canvas>
   )
 }

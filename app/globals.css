@@ -182,6 +182,40 @@
   animation: route-pulse 3.4s linear infinite;
 }
 
+/* The curtain ships in the server-rendered HTML so it covers the first paint. When the
+   blocking script in layout.tsx decides this load doesn't get one, this hides it before
+   anything is painted — React then unmounts it on hydration. */
+:root[data-intro="skip"] .intro-curtain {
+  display: none !important;
+}
+
+/* Rotating meridians for the no-WebGL globe fallback. scaleX is exactly how a meridian
+   projects as it turns, so scaling from 1 → 0 → -1 → 0 reads as a full revolution.
+   transform-box: fill-box is required, or the origin resolves against the SVG viewport. */
+@keyframes globe-meridian-spin {
+  0% {
+    transform: scaleX(1);
+  }
+  25% {
+    transform: scaleX(0.02);
+  }
+  50% {
+    transform: scaleX(-1);
+  }
+  75% {
+    transform: scaleX(0.02);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+.globe-meridian {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: globe-meridian-spin 18s linear infinite;
+}
+
 /* Nav/CTA fill wipe. Tailwind can't express the pseudo-element, so it lives here. */
 @utility btn-wipe {
   position: relative;

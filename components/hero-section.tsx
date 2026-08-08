@@ -85,7 +85,7 @@ export function HeroSection() {
       <HeroBackdrop />
 
       <div className="container relative z-10 mx-auto flex flex-1 items-center px-4 pt-28 pb-10 md:px-8 md:pt-32 md:pb-14">
-        <div className="grid w-full items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:gap-16">
+        <div className="grid w-full items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:gap-16 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
           {/* Copy */}
           <motion.div initial={reduce ? false : "hidden"} animate="visible" variants={container}>
             <motion.p
@@ -133,7 +133,7 @@ export function HeroSection() {
           {/* 3D globe. Hidden below lg — at phone widths it only ever fights the copy,
               and it's the most expensive thing on the page. */}
           <div className="hidden justify-center lg:flex">
-            <HeroGlobe className="max-h-[52vh]" />
+            <HeroGlobe />
           </div>
         </div>
       </div>

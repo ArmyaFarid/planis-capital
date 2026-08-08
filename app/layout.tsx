@@ -76,6 +76,21 @@ export default function RootLayout({
   return (
     <html lang="fr" className="bg-background">
       <body className={`${interTight.variable} ${instrumentSerif.variable} font-sans antialiased`}>
+        {/*
+          Blocking, and deliberately placed before {children}: it decides the intro-curtain
+          state before the page markup is even parsed. Doing this in a useEffect means the
+          hero paints first and the curtain drops on top of it a frame later, which reads
+          as content flashing behind a loader. Same pattern as a no-flash theme script.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var d=document.documentElement;try{
+if(window.matchMedia('(prefers-reduced-motion: reduce)').matches||sessionStorage.getItem('planis.introShown')){d.dataset.intro='skip';return}
+sessionStorage.setItem('planis.introShown','1');d.dataset.intro='show';
+if(!location.hash){if('scrollRestoration' in history){history.scrollRestoration='manual'}window.scrollTo(0,0)}
+}catch(e){d.dataset.intro='skip'}})()`,
+          }}
+        />
         {children}
         <Analytics />
       </body>

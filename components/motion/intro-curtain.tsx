@@ -2,42 +2,52 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import { AnimatePresence, motion, useReducedMotion } from "motion/react"
+import { AnimatePresence, motion } from "motion/react"
 import { EASE_OUT_QUART } from "@/lib/motion"
 import { lockScroll } from "@/lib/scroll-lock"
 
-const SESSION_KEY = "planis.introShown"
+const HOLD_MS = 1700
 
 /**
- * Brand curtain on first load. Shown once per tab session — replaying it on every internal
- * navigation turns a flourish into an obstacle.
+ * Brand curtain on first load.
+ *
+ * Starts `visible` so it is present in the server-rendered HTML and covers the very first
+ * paint — deciding in an effect instead would let the hero paint first and drop the
+ * curtain on top of it, which looks like content flashing behind a loader.
+ *
+ * Whether this load actually gets a curtain is decided by the blocking script in
+ * layout.tsx (session + reduced-motion), which stamps `data-intro` on <html> before any
+ * markup is parsed. CSS hides the curtain instantly for the skip case; this component
+ * then unmounts it on hydration.
  */
 export function IntroCurtain() {
-  const reduce = useReducedMotion()
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
+  const [shouldShow, setShouldShow] = useState<boolean | null>(null)
 
   useEffect(() => {
-    if (reduce) return
-    if (window.sessionStorage.getItem(SESSION_KEY)) return
+    const show = document.documentElement.dataset.intro === "show"
+    setShouldShow(show)
+    if (!show) setVisible(false)
+  }, [])
 
-    window.sessionStorage.setItem(SESSION_KEY, "1")
-    setVisible(true)
-
+  // Keyed on `visible` so hiding the curtain runs the cleanup and releases the lock.
+  // Locking in the effect above would only ever unlock on unmount.
+  useEffect(() => {
+    if (!shouldShow || !visible) return
     const unlock = lockScroll()
-    const timer = window.setTimeout(() => setVisible(false), 1700)
-
+    const timer = window.setTimeout(() => setVisible(false), HOLD_MS)
     return () => {
       window.clearTimeout(timer)
-      unlock(false)
+      unlock()
     }
-  }, [reduce])
+  }, [shouldShow, visible])
 
   return (
     <AnimatePresence>
       {visible ? (
         <motion.div
           key="curtain"
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0A1628]"
+          className="intro-curtain fixed inset-0 z-[100] flex items-center justify-center bg-[#0A1628]"
           initial={{ clipPath: "inset(0 0 0% 0)" }}
           exit={{ clipPath: "inset(0 0 100% 0)" }}
           transition={{ duration: 1, ease: EASE_OUT_QUART }}
