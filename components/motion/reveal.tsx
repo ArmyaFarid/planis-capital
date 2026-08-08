@@ -1,9 +1,17 @@
 "use client"
 
-import type { ElementType, ReactNode } from "react"
+import type { ReactNode } from "react"
+
 import { motion, useReducedMotion, type Variants } from "motion/react"
 import { cn } from "@/lib/utils"
 import { VIEWPORT, fadeUp, staggerParentWith } from "@/lib/motion"
+/**
+ * Narrowed to real HTML tags on purpose. React's ElementType now also covers three.js
+ * elements (R3F augments the global JSX namespace), and those declare `children: never`,
+ * which makes a generic `as` prop fail to typecheck.
+ */
+type HtmlTag = keyof HTMLElementTagNameMap
+
 
 interface RevealProps {
   children: ReactNode
@@ -11,7 +19,7 @@ interface RevealProps {
   /** Seconds. Use for one-off ordering; prefer RevealGroup for lists. */
   delay?: number
   variants?: Variants
-  as?: ElementType
+  as?: HtmlTag
 }
 
 /**
@@ -23,7 +31,7 @@ export function Reveal({ children, className, delay = 0, variants = fadeUp, as =
   const Comp = motion[as as keyof typeof motion] as typeof motion.div
 
   if (reduce) {
-    const Static = as as ElementType
+    const Static = as
     return <Static className={className}>{children}</Static>
   }
 
@@ -47,7 +55,7 @@ interface RevealGroupProps {
   /** Seconds between each direct child. */
   stagger?: number
   delayChildren?: number
-  as?: ElementType
+  as?: HtmlTag
 }
 
 /**
@@ -65,7 +73,7 @@ export function RevealGroup({
   const Comp = motion[as as keyof typeof motion] as typeof motion.div
 
   if (reduce) {
-    const Static = as as ElementType
+    const Static = as
     return <Static className={className}>{children}</Static>
   }
 
@@ -86,7 +94,7 @@ interface RevealItemProps {
   children: ReactNode
   className?: string
   variants?: Variants
-  as?: ElementType
+  as?: HtmlTag
 }
 
 export function RevealItem({ children, className, variants = fadeUp, as = "div" }: RevealItemProps) {
@@ -94,7 +102,7 @@ export function RevealItem({ children, className, variants = fadeUp, as = "div" 
   const Comp = motion[as as keyof typeof motion] as typeof motion.div
 
   if (reduce) {
-    const Static = as as ElementType
+    const Static = as
     return <Static className={className}>{children}</Static>
   }
 

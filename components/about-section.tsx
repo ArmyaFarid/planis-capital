@@ -2,6 +2,7 @@
 
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal"
 import { AnimatedParagraph, AnimatedRule, AnimatedWords } from "@/components/motion/animated-text"
+import { TiltCard } from "@/components/motion/tilt-card"
 import { SectorCard, type SectorCardProps } from "./sector-card"
 import { cardIn } from "@/lib/motion"
 import { useLanguage } from "@/lib/language-context"
@@ -75,7 +76,9 @@ export function AboutSection() {
           <RevealGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4" stagger={0.1}>
             {sectors.map((sector) => (
               <RevealItem key={sector.title} variants={cardIn}>
-                <SectorCard {...sector} />
+                <TiltCard max={7}>
+                  <SectorCard {...sector} />
+                </TiltCard>
               </RevealItem>
             ))}
           </RevealGroup>

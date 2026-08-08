@@ -5,9 +5,10 @@ import Image from "next/image"
 import Link from "next/link"
 import { ChevronDown } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
-import { AfricaMap } from "@/components/africa-map"
+import { HeroGlobe } from "@/components/globe/hero-globe"
 import { StatsStrip } from "@/components/stats-strip"
 import { AnimatedWords } from "@/components/motion/animated-text"
+import { Magnetic } from "@/components/motion/magnetic"
 import { EASE_OUT_QUART } from "@/lib/motion"
 import { useLanguage } from "@/lib/language-context"
 
@@ -107,27 +108,32 @@ export function HeroSection() {
               {t("hero.description")}
             </motion.p>
 
-            <motion.div variants={item} className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <Link
-                href="#a-propos"
-                className="bg-accent px-8 py-4 text-center font-semibold text-accent-foreground transition-colors duration-300 hover:bg-accent-hover"
-              >
-                {t("hero.cta1")}
-              </Link>
-              <Link
-                href="#contact"
-                className="btn-wipe border-2 border-primary-foreground/70 px-8 py-4 text-center font-semibold text-primary-foreground transition-colors duration-300 hover:border-accent"
-              >
-                {t("hero.cta2")}
-              </Link>
+            <motion.div variants={item} className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-start">
+              <Magnetic>
+                <Link
+                  href="#a-propos"
+                  data-cursor="link"
+                  className="block bg-accent px-8 py-4 text-center font-semibold text-accent-foreground transition-colors duration-300 hover:bg-accent-hover"
+                >
+                  {t("hero.cta1")}
+                </Link>
+              </Magnetic>
+              <Magnetic>
+                <Link
+                  href="#contact"
+                  data-cursor="link"
+                  className="btn-wipe block border-2 border-primary-foreground/70 px-8 py-4 text-center font-semibold text-primary-foreground transition-colors duration-300 hover:border-accent"
+                >
+                  {t("hero.cta2")}
+                </Link>
+              </Magnetic>
             </motion.div>
           </motion.div>
 
-          {/* Map. Hidden below lg — at phone widths it only ever fights the copy. */}
-          {/* Height-capped, width derived from the viewBox ratio — a width-driven map
-              overruns short laptop viewports and pushes the stat band below the fold. */}
+          {/* 3D globe. Hidden below lg — at phone widths it only ever fights the copy,
+              and it's the most expensive thing on the page. */}
           <div className="hidden justify-center lg:flex">
-            <AfricaMap className="h-[min(44vh,24rem)] w-auto" />
+            <HeroGlobe className="max-h-[52vh]" />
           </div>
         </div>
       </div>

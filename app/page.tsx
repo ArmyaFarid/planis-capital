@@ -10,19 +10,26 @@ import { PolicySection } from "@/components/policy-section"
 import { ContactSection } from "@/components/contact-section"
 import { Footer } from "@/components/footer"
 import { SmoothScroll } from "@/components/smooth-scroll"
+import { IntroCurtain } from "@/components/motion/intro-curtain"
+import { CustomCursor } from "@/components/motion/custom-cursor"
+import { MarqueeBand } from "@/components/marquee-band"
 import { LanguageProvider } from "@/lib/language-context"
 
 export default function HomePage() {
   return (
     <LanguageProvider>
       <SmoothScroll />
+      <IntroCurtain />
+      <CustomCursor />
       <main className="min-h-screen bg-background">
         <Navigation />
         <HeroSection />
         <AboutSection />
+        <MarqueeBand />
         <CriteriaSection />
         <ValuesSection />
         <PortfolioSection />
+        <MarqueeBand className="border-y-0" />
         <PolicySection />
         <ContactSection />
         <Footer />

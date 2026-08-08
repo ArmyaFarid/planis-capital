@@ -62,6 +62,7 @@ export function PortfolioSection() {
                   href={company.website}
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-cursor-label={t("portfolio.visit")}
                   className={cn(
                     "group flex h-full flex-col overflow-hidden border border-border bg-card transition-all duration-500 hover:-translate-y-1 hover:border-accent/50 hover:shadow-lg",
                     isSingle && "sm:flex-row",

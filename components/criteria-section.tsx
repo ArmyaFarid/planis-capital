@@ -4,6 +4,7 @@ import { Banknote, Globe, Target, TrendingUp } from "lucide-react"
 import { motion } from "motion/react"
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal"
 import { AnimatedWords } from "@/components/motion/animated-text"
+import { TiltCard } from "@/components/motion/tilt-card"
 import { EASE_OUT_QUART, cardIn } from "@/lib/motion"
 import { useLanguage } from "@/lib/language-context"
 
@@ -51,7 +52,8 @@ export function CriteriaSection() {
         <RevealGroup className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8" stagger={0.1}>
           {criteria.map((item) => (
             <RevealItem key={item.title} variants={cardIn} className="h-full">
-              <div className="group h-full border border-transparent bg-background p-8 transition-all duration-500 hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg md:p-10">
+              <TiltCard max={6} className="h-full">
+              <div className="group h-full border border-transparent bg-background p-8 transition-all duration-500 hover:border-accent/40 hover:shadow-lg md:p-10">
                 <div className="flex items-start gap-6">
                   <motion.div
                     className="flex h-14 w-14 flex-shrink-0 items-center justify-center bg-primary/10 transition-colors duration-500 group-hover:bg-accent/10"
@@ -74,6 +76,7 @@ export function CriteriaSection() {
                   </div>
                 </div>
               </div>
+              </TiltCard>
             </RevealItem>
           ))}
         </RevealGroup>

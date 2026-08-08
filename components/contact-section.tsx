@@ -2,6 +2,7 @@
 
 import { Mail, Send } from "lucide-react"
 import { Reveal } from "@/components/motion/reveal"
+import { Magnetic } from "@/components/motion/magnetic"
 import { AnimatedWords } from "@/components/motion/animated-text"
 import { cardIn } from "@/lib/motion"
 import { useLanguage } from "@/lib/language-context"
@@ -45,13 +46,16 @@ export function ContactSection() {
               </a>
 
               <div className="flex justify-center">
+                <Magnetic>
                 <a
                   href={`mailto:${EMAIL}`}
+                  data-cursor="link"
                   className="group/cta inline-flex items-center bg-accent px-8 py-4 font-semibold text-accent-foreground transition-colors duration-300 hover:bg-accent-hover"
                 >
                   <Send className="mr-2 h-5 w-5 transition-transform duration-300 group-hover/cta:translate-x-1" />
                   {t("contact.cta")}
                 </a>
+                </Magnetic>
               </div>
             </div>
           </Reveal>
