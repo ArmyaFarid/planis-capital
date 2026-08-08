@@ -1,0 +1,113 @@
+"use client"
+
+import Image from "next/image"
+import { ArrowUpRight } from "lucide-react"
+import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal"
+import { AnimatedWords } from "@/components/motion/animated-text"
+import { cardIn } from "@/lib/motion"
+import { useLanguage } from "@/lib/language-context"
+import { cn } from "@/lib/utils"
+
+interface PortfolioCompany {
+  name: string
+  logo: string
+  description: string
+  website: string
+  sector: string
+}
+
+export function PortfolioSection() {
+  const { t } = useLanguage()
+
+  const portfolioCompanies: PortfolioCompany[] = [
+    {
+      name: "West-ML Innovation",
+      // White lockup: the card sits on navy, and the .jpg carries a white background box.
+      logo: "/images/westml-logo-white.png",
+      description: t("portfolio.westml.desc"),
+      website: "https://westml-innovation.com/",
+      sector: t("portfolio.westml.sector"),
+    },
+  ]
+
+  // A lone card inside a 2-col grid renders half-width and reads unfinished.
+  const isSingle = portfolioCompanies.length === 1
+
+  return (
+    <section id="portefeuille" className="bg-background py-24 md:py-32">
+      <div className="container mx-auto px-4 md:px-8">
+        <div className="mx-auto mb-16 max-w-3xl text-center">
+          <Reveal>
+            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
+              {t("portfolio.section")}
+            </span>
+          </Reveal>
+
+          <h2 className="mt-6 font-serif text-h2 text-balance text-foreground">
+            <AnimatedWords text={t("portfolio.title")} trigger="view" />
+          </h2>
+
+          <Reveal delay={0.2}>
+            <p className="mt-6 text-lead text-pretty text-muted-foreground">
+              {t("portfolio.subtitle")}
+            </p>
+          </Reveal>
+        </div>
+
+        <RevealGroup className="mx-auto max-w-4xl" stagger={0.1}>
+          <div className={cn("grid gap-6", isSingle ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2")}>
+            {portfolioCompanies.map((company) => (
+              <RevealItem key={company.website} variants={cardIn}>
+                <a
+                  href={company.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    "group flex h-full flex-col overflow-hidden border border-border bg-card transition-all duration-500 hover:-translate-y-1 hover:border-accent/50 hover:shadow-lg",
+                    isSingle && "sm:flex-row",
+                  )}
+                >
+                  {/* The logo IS the company name — no heading repeating it underneath. */}
+                  <div
+                    className={cn(
+                      "relative flex items-center justify-center overflow-hidden bg-secondary p-8",
+                      isSingle ? "sm:w-2/5 sm:shrink-0" : "aspect-[16/9]",
+                    )}
+                  >
+                    <Image
+                      src={company.logo}
+                      alt={company.name}
+                      width={280}
+                      height={100}
+                      className="max-h-20 object-contain transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-accent/0 transition-colors duration-500 group-hover:bg-accent/5" />
+                  </div>
+
+                  <div className="flex flex-1 flex-col p-6 md:p-8">
+                    <div className="mb-3 flex items-start justify-between gap-4">
+                      <span className="text-xs font-medium uppercase tracking-[0.18em] text-accent">
+                        {company.sector}
+                      </span>
+                      <ArrowUpRight className="h-5 w-5 flex-shrink-0 text-muted-foreground transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent" />
+                    </div>
+
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      {company.description}
+                    </p>
+
+                    <div className="mt-auto border-t border-border pt-4">
+                      <span className="text-sm font-medium text-accent group-hover:underline">
+                        {t("portfolio.visit")} &rarr;
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              </RevealItem>
+            ))}
+          </div>
+        </RevealGroup>
+      </div>
+    </section>
+  )
+}

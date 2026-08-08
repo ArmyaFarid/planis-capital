@@ -1,0 +1,216 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* Real hover capability, not a width guess. Touch devices never match, so hover-only
+   affordances can be given an always-visible fallback there.
+   Block form with @slot — the shorthand `(@media ...)` form emits nothing. */
+@custom-variant can-hover {
+  @media (hover: hover) and (pointer: fine) {
+    @slot;
+  }
+}
+
+:root {
+  --background: #0A1628;
+  --foreground: #F7F5F2;
+  --card: #16294A;
+  --card-foreground: #F7F5F2;
+  --popover: #16294A;
+  --popover-foreground: #F7F5F2;
+  --primary: #16294A;
+  --primary-foreground: #F7F5F2;
+  --secondary: #16294A;
+  --secondary-foreground: #F7F5F2;
+  --muted: #16294A;
+  --muted-foreground: #B8C0CC;
+  --accent: #C0432F;
+  --accent-foreground: #F7F5F2;
+  --accent-hover: #9E3322;
+  --destructive: #C0432F;
+  --destructive-foreground: #F7F5F2;
+  --border: #243B5E;
+  --input: #243B5E;
+  --ring: #C0432F;
+  --chart-1: #C0432F;
+  --chart-2: #B8C0CC;
+  --chart-3: #9E3322;
+  --chart-4: #243B5E;
+  --chart-5: #F7F5F2;
+  --radius: 0.5rem;
+  --sidebar: #0A1628;
+  --sidebar-foreground: #F7F5F2;
+  --sidebar-primary: #C0432F;
+  --sidebar-primary-foreground: #F7F5F2;
+  --sidebar-accent: #16294A;
+  --sidebar-accent-foreground: #F7F5F2;
+  --sidebar-border: #243B5E;
+  --sidebar-ring: #C0432F;
+}
+
+/* Fluid type + shared easing. Plain @theme (not inline) so Tailwind emits the vars and
+   generates text-display / text-h2 / ease-out-expo utilities from the namespaces. */
+@theme {
+  --text-display: clamp(2.5rem, 1.5rem + 4.5vw, 5.5rem);
+  --text-display--line-height: 1.02;
+  --text-h2: clamp(1.875rem, 1.25rem + 2.5vw, 3.25rem);
+  --text-h2--line-height: 1.1;
+  --text-h3: clamp(1.375rem, 1.15rem + 0.9vw, 1.875rem);
+  --text-h3--line-height: 1.25;
+  --text-lead: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
+  --text-lead--line-height: 1.65;
+
+  /* Mirrored as JS arrays in lib/motion.ts — keep the two in step. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+@theme inline {
+  --font-sans: var(--font-inter-tight), 'Inter Tight', system-ui, sans-serif;
+  --font-serif: var(--font-instrument-serif), 'Instrument Serif', Georgia, serif;
+  --color-accent-hover: var(--accent-hover);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  /* Instrument Serif runs optically large and loose; pull it in for display use. */
+  .font-serif {
+    letter-spacing: -0.015em;
+  }
+}
+
+/* Capital travelling along the map's trade routes. Driven in CSS rather than JS because
+   motion won't animate offset-distance — it resolves the computed value to px and the
+   percentage keyframes never take. The global reduced-motion rule disables it. */
+@keyframes route-pulse {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+@utility route-pulse {
+  offset-distance: 0%;
+  offset-rotate: 0deg;
+  animation: route-pulse 3.4s linear infinite;
+}
+
+/* Nav/CTA fill wipe. Tailwind can't express the pseudo-element, so it lives here. */
+@utility btn-wipe {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s var(--ease-out-expo);
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
