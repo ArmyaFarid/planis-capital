@@ -74,7 +74,11 @@ export default function RootLayout({
   // lang is kept in sync with the FR/EN toggle by LanguageProvider.
   // No scroll-smooth here: SmoothScroll owns scrolling and re-adds it on its fallback path.
   return (
-    <html lang="fr" className="bg-background">
+    // suppressHydrationWarning is required, not a workaround: the script below stamps
+    // data-intro on <html> before React hydrates, so the server markup and the live DOM
+    // legitimately differ on that attribute. Applies one level deep, so it covers only
+    // <html>'s own attributes — and incidentally the ones browser extensions inject here.
+    <html lang="fr" className="bg-background" suppressHydrationWarning>
       <body className={`${interTight.variable} ${instrumentSerif.variable} font-sans antialiased`}>
         {/*
           Blocking, and deliberately placed before {children}: it decides the intro-curtain
