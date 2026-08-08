@@ -2,11 +2,10 @@
 
 import { ScrambleText } from "@/components/motion/scramble-text"
 import { WeightScroll } from "@/components/motion/weight-scroll"
-import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal"
+import { Reveal } from "@/components/motion/reveal"
 import { AnimatedParagraph, AnimatedRule, AnimatedWords } from "@/components/motion/animated-text"
 import { type SectorCardProps } from "./sector-card"
 import { SectorShowcase } from "./sector-showcase"
-import { cardIn } from "@/lib/motion"
 import { useLanguage } from "@/lib/language-context"
 
 export function AboutSection() {

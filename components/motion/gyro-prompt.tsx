@@ -25,6 +25,9 @@ export function GyroPrompt() {
 
     // Preview flag shows immediately so the design can be checked.
     if (new URLSearchParams(window.location.search).has("gyro")) {
+      // Syncs React state from an external system on mount (reads the URL). There is no
+      // render-time source for it, and reading during render breaks hydration.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setVisible(true)
       return
     }

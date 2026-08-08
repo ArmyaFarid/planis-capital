@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react"
 import { animate, useInView, useMotionValue, useReducedMotion, useTransform, motion } from "motion/react"
 import { useLanguage } from "@/lib/language-context"
 import { useGyroTilt } from "@/lib/use-gyro-tilt"
-import { GyroLayer } from "@/components/motion/gyro-layer"
 import { EASE_OUT_EXPO } from "@/lib/motion"
 
 interface Stat {

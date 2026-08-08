@@ -66,6 +66,9 @@ export function SectorCarousel({ sectors }: SectorCarouselProps) {
 
   useEffect(() => {
     if (!embla) return
+    // Syncs React state from an external system on mount (reads Embla's current slide). There is no
+    // render-time source for it, and reading during render breaks hydration.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSelected(embla.selectedScrollSnap())
     const onDown = () => {
       draggingRef.current = true

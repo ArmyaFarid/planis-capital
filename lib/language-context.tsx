@@ -242,6 +242,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const stored = window.localStorage.getItem(STORAGE_KEY)
     if (stored === "fr" || stored === "en") {
+      // Syncs React state from an external system on mount (reads localStorage). There is no
+      // render-time source for it, and reading during render breaks hydration.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLanguageState(stored)
     }
   }, [])

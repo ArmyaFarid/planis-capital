@@ -127,13 +127,9 @@ export function HeroSection() {
                   }
             }
           >
-            <motion.p
-              variants={item}
-              className="mb-5 text-sm font-semibold uppercase tracking-[0.3em] text-accent md:text-base"
-            >
-              {t("hero.subtitle")}
-            </motion.p>
-
+            {/* No "Planis Capital" eyebrow: the logo in the header already carries the
+                name, so repeating it above the headline is the same redundancy as the
+                portfolio card's duplicated wordmark. */}
             <h1 className="font-serif text-display text-primary-foreground">
               {/* Sheen goes on title1: title2 already runs the one-shot text-sweep, and
                   two animations driving background-position would fight. */}

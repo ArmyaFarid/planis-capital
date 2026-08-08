@@ -53,6 +53,9 @@ export function HeroGlobe({ className, focusRef }: HeroGlobeProps) {
 
   useEffect(() => {
     if (FORCE_2D_FALLBACK || new URLSearchParams(window.location.search).has("no3d")) {
+      // Syncs React state from an external system on mount (reads a WebGL capability probe). There is no
+      // render-time source for it, and reading during render breaks hydration.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setStatus("fallback")
       return
     }

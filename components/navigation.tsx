@@ -120,11 +120,6 @@ export function Navigation() {
 
   const toggleLanguage = () => setLanguage(language === "fr" ? "en" : "fr")
 
-  const closeMenu = () => {
-    setIsMobileMenuOpen(false)
-    triggerRef.current?.focus()
-  }
-
   // The overlay pins the body, so the browser's own anchor jump is a no-op here. Record
   // the destination and let the unlock perform it once the page is scrollable again.
   const handleMobileNavClick = (event: React.MouseEvent<HTMLAnchorElement>, href: string) => {

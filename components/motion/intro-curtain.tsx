@@ -26,6 +26,9 @@ export function IntroCurtain() {
 
   useEffect(() => {
     const show = document.documentElement.dataset.intro === "show"
+    // Syncs React state from an external system on mount (reads the data-intro attribute set before hydration). There is no
+    // render-time source for it, and reading during render breaks hydration.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setShouldShow(show)
     if (!show) setVisible(false)
   }, [])

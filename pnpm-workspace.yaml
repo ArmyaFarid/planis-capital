@@ -1,6 +1,7 @@
-# pnpm 11 gates postinstall scripts. Without sharp allowed here, every pnpm command —
+# pnpm 11 gates postinstall scripts. Without these allowed here, every pnpm command —
 # including `pnpm dev` — fails its deps-status check with ERR_PNPM_IGNORED_BUILDS.
-# sharp is Next's image optimiser: unused while next.config.mjs sets images.unoptimized,
-# but allowing the build keeps that switch reversible.
 allowBuilds:
+  # Next's image optimiser, used in production now that next.config enables optimisation.
   sharp: true
+  # Native resolver used by eslint-config-next.
+  unrs-resolver: true

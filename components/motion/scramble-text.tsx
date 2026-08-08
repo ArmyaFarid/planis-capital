@@ -29,6 +29,9 @@ export function ScrambleText({ text, className }: ScrambleTextProps) {
 
   useEffect(() => {
     if (reduce || !inView) {
+      // Syncs React state from an external system on mount (seeds from props on first view). There is no
+      // render-time source for it, and reading during render breaks hydration.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDisplay(text)
       return
     }
