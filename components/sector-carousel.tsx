@@ -80,11 +80,18 @@ export function SectorCarousel({ sectors }: SectorCarouselProps) {
     embla.on("reInit", onSelect)
     embla.on("pointerDown", onDown)
     embla.on("settle", onSettle)
+
+    // Embla measures on init. Inside a sticky, full-bleed wrapper those measurements can
+    // land before layout settles, leaving the track translated wrongly; re-measuring once
+    // the next frame and after fonts/images land is cheap insurance.
+    const raf = requestAnimationFrame(() => embla.reInit())
+    window.addEventListener("load", () => embla.reInit())
     return () => {
       embla.off("select", onSelect)
       embla.off("reInit", onSelect)
       embla.off("pointerDown", onDown)
       embla.off("settle", onSettle)
+      cancelAnimationFrame(raf)
     }
   }, [embla, onSelect])
 
@@ -127,7 +134,7 @@ export function SectorCarousel({ sectors }: SectorCarouselProps) {
                     i === selected ? "scale-100 opacity-100" : "scale-[0.9] opacity-45",
                   )}
                 >
-                  <SectorCard {...sector} active={i === selected} />
+                  <SectorCard {...sector} active={i === selected} inCarousel />
                 </GyroLayer>
               </div>
             ))}

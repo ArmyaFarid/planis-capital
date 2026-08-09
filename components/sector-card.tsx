@@ -15,6 +15,14 @@ export interface SectorCardProps {
   overlayColor?: string
   /** Touch equivalent of hover: the carousel's centred slide is "active". */
   active?: boolean
+  /**
+   * Disables the scroll-triggered entrance. Required inside the carousel: its slides sit
+   * in an overflow-hidden track, and IntersectionObserver honours ancestor clipping — an
+   * off-screen slide has zero intersection, so whileInView never fires and the card is
+   * left permanently at clipPath inset(0 0 100% 0), i.e. invisible. The carousel supplies
+   * its own entrance (per-slide scale/opacity) so nothing is lost.
+   */
+  inCarousel?: boolean
 }
 
 /**
@@ -28,6 +36,7 @@ export function SectorCard({
   description,
   overlayColor = "bg-primary/90",
   active = false,
+  inCarousel = false,
 }: SectorCardProps) {
   const ref = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
@@ -41,14 +50,14 @@ export function SectorCard({
     <motion.div
       ref={ref}
       className="group relative aspect-[4/5] overflow-hidden"
-      initial={reduce ? false : { clipPath: "inset(0 0 100% 0)" }}
-      whileInView={{ clipPath: "inset(0 0 0% 0)" }}
+      initial={reduce || inCarousel ? false : { clipPath: "inset(0 0 100% 0)" }}
+      whileInView={inCarousel ? undefined : { clipPath: "inset(0 0 0% 0)" }}
       viewport={VIEWPORT}
       transition={{ duration: 1.2, ease: EASE_OUT_QUART }}
     >
       {/* Second layer: an accent panel that rides up out of the frame just behind the
           card's own reveal, so the image is uncovered rather than simply faded in. */}
-      {reduce ? null : (
+      {reduce || inCarousel ? null : (
         <motion.div
           className="absolute inset-0 z-20 bg-accent"
           initial={{ y: "0%" }}
