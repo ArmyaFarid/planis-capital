@@ -1,7 +1,8 @@
 "use client"
 
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import Image from "next/image"
+import { Plus } from "lucide-react"
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useGyroTilt } from "@/lib/use-gyro-tilt"
 import { EASE_OUT_QUART, VIEWPORT } from "@/lib/motion"
@@ -16,30 +17,43 @@ export interface SectorCardProps {
   /** Touch equivalent of hover: the carousel's centred slide is "active". */
   active?: boolean
   /**
-   * Disables the scroll-triggered entrance. Required inside the carousel: its slides sit
-   * in an overflow-hidden track, and IntersectionObserver honours ancestor clipping — an
-   * off-screen slide has zero intersection, so whileInView never fires and the card is
-   * left permanently at clipPath inset(0 0 100% 0), i.e. invisible. The carousel supplies
-   * its own entrance (per-slide scale/opacity) so nothing is lost.
+   * Disables the scroll-triggered entrance. Required for both sliding tracks — the mobile
+   * carousel and the desktop showcase. Their slides sit in an overflow-hidden container,
+   * and IntersectionObserver honours ancestor clipping, so an off-screen slide has zero
+   * intersection, whileInView never fires, and the card is left permanently at clipPath
+   * inset(0 0 100% 0), i.e. invisible. Now that reveals replay this is not self-correcting
+   * either: a card can revert to hidden and never get another trigger. Each track supplies
+   * its own motion — horizontal travel, and per-slide scale/opacity — so nothing is lost.
    */
   inCarousel?: boolean
 }
 
 /**
  * Hover swaps the title plate for the full description on pointer devices. Touch devices
- * have no hover, so below the `can-hover` guard both are shown stacked — otherwise the
- * description is simply unreachable on a phone.
+ * have no hover, so the description is opened by tapping the card — the ⊕ button is the
+ * affordance that says so, and it only exists below the `can-hover` guard.
  */
 export function SectorCard({
   image,
   title,
   description,
-  overlayColor = "bg-primary/90",
+  overlayColor = "bg-primary/50",
   active = false,
   inCarousel = false,
 }: SectorCardProps) {
   const ref = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
+  // Touch-only open state. Pointer devices never read it — hover owns them entirely.
+  const [open, setOpen] = useState(false)
+
+  // Swiping to another card closes this one, so you never leave a trail of open cards
+  // behind you in the carousel. Adjusted during render rather than in an effect: this is
+  // state derived from a prop change, which React prescribes this exact pattern for.
+  const [wasActive, setWasActive] = useState(active)
+  if (wasActive !== active) {
+    setWasActive(active)
+    if (!active) setOpen(false)
+  }
 
   const gyro = useGyroTilt(0.7)
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] })
@@ -49,7 +63,16 @@ export function SectorCard({
   return (
     <motion.div
       ref={ref}
-      className="group relative aspect-[4/5] overflow-hidden"
+      role="button"
+      tabIndex={0}
+      aria-expanded={open}
+      onClick={() => setOpen((o) => !o)}
+      onKeyDown={(e) => {
+        if (e.key !== "Enter" && e.key !== " ") return
+        e.preventDefault()
+        setOpen((o) => !o)
+      }}
+      className="group relative aspect-[4/5] overflow-hidden can-hover:cursor-default"
       initial={reduce || inCarousel ? false : { clipPath: "inset(0 0 100% 0)" }}
       whileInView={inCarousel ? undefined : { clipPath: "inset(0 0 0% 0)" }}
       viewport={VIEWPORT}
@@ -109,16 +132,30 @@ export function SectorCard({
         )}
       />
 
+      {/* Tap affordance. Touch only — on pointer devices hover already reveals the copy,
+          so a button telling you to click would be noise. */}
+      <div
+        aria-hidden="true"
+        className={cn(
+          "absolute bottom-6 right-6 z-10 flex h-11 w-11 items-center justify-center rounded-full",
+          "bg-accent text-accent-foreground shadow-lg transition-transform duration-500 ease-out",
+          "can-hover:hidden",
+          open ? "rotate-[135deg]" : "rotate-0",
+        )}
+      >
+        <Plus className="h-5 w-5" />
+      </div>
+
       <div className="absolute inset-0 flex flex-col justify-end p-6">
-        <h3 className="font-sans text-h3 font-semibold uppercase tracking-tight text-primary-foreground">
+        <h3 className="pr-14 font-sans text-h3 font-semibold uppercase tracking-tight text-primary-foreground">
           {title}
         </h3>
         <p
           className={cn(
-            "mt-3 overflow-hidden text-sm leading-relaxed text-primary-foreground/90",
+            "mt-3 overflow-hidden pr-14 text-sm leading-relaxed text-primary-foreground/90",
             "transition-all duration-500 ease-out",
-            // Touch: driven by the carousel's centred slide.
-            active ? "max-h-52 opacity-100" : "max-h-0 opacity-0",
+            // Touch: opened by tapping the card, not by being the centred slide.
+            open ? "max-h-52 opacity-100" : "max-h-0 opacity-0",
             // Pointer devices: hover takes over entirely.
             "can-hover:max-h-0 can-hover:opacity-0",
             "can-hover:group-hover:max-h-52 can-hover:group-hover:opacity-100",

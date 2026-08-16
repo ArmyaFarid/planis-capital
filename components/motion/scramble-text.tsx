@@ -23,7 +23,7 @@ interface ScrambleTextProps {
  */
 export function ScrambleText({ text, className }: ScrambleTextProps) {
   const ref = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-10% 0px" })
+  const inView = useInView(ref, { once: false, margin: "-10% 0px" })
   const reduce = useReducedMotion()
   const [display, setDisplay] = useState(text)
 

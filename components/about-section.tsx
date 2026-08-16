@@ -16,26 +16,29 @@ export function AboutSection() {
       image: "/images/sector-manufacturing.jpg",
       title: t("sector.manufacturing"),
       description: t("sector.manufacturing.desc"),
-      overlayColor: "bg-primary/90",
+      overlayColor: "bg-primary/50",
     },
     {
       image: "/images/sector-health.jpg",
       title: t("sector.health"),
       description: t("sector.health.desc"),
-      overlayColor: "bg-accent/90",
+      overlayColor: "bg-accent/50",
     },
     {
       image: "/images/sector-food.jpg",
       title: t("sector.food"),
       description: t("sector.food.desc"),
-      overlayColor: "bg-primary/90",
+      overlayColor: "bg-primary/50",
     },
     {
-      // TODO(client): no /images/sector-distribution.jpg exists yet — renders the
-      // placeholder plate until one is supplied.
+      // Public domain (work of the U.S. federal government), via Wikimedia Commons:
+      // "JFC-UA to transfer ETU resupply mission to World Food Program", Liberia, 2014.
+      // Cropped square and tone-lifted to sit with the other three. Free for commercial
+      // use with no attribution required — replace freely if the client commissions one.
+      image: "/images/sector-distribution.jpg",
       title: t("sector.distribution"),
       description: t("sector.distribution.desc"),
-      overlayColor: "bg-accent/90",
+      overlayColor: "bg-accent/50",
     },
   ]
 
@@ -49,7 +52,7 @@ export function AboutSection() {
             </span>
           </Reveal>
 
-          <WeightScroll as="h2" className="mt-6 mb-8 font-serif text-h2 text-balance text-foreground">
+          <WeightScroll as="h2" className="mt-6 mb-8 font-display text-h2 text-balance text-foreground">
             <AnimatedWords text={t("about.title")} trigger="view" />
           </WeightScroll>
 
@@ -69,7 +72,7 @@ export function AboutSection() {
         <div>
           <div className="mb-16 text-center">
             <AnimatedRule className="mx-auto mb-16 max-w-xs text-foreground" />
-            <h3 className="font-serif text-h2 text-foreground">
+            <h3 className="font-display text-h2 text-foreground">
               <AnimatedWords text={t("about.sectors")} trigger="view" />
             </h3>
           </div>

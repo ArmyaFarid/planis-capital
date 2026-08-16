@@ -46,7 +46,7 @@ export function PortfolioSection() {
             </span>
           </Reveal>
 
-          <WeightScroll as="h2" className="mt-6 font-serif text-h2 text-balance text-foreground">
+          <WeightScroll as="h2" className="mt-6 font-display text-h2 text-balance text-foreground">
             <AnimatedWords text={t("portfolio.title")} trigger="view" />
           </WeightScroll>
 
@@ -72,10 +72,12 @@ export function PortfolioSection() {
                     isSingle && "sm:flex-row",
                   )}
                 >
-                  {/* The logo IS the company name — no heading repeating it underneath. */}
+                  {/* The logo IS the company name — no heading repeating it underneath.
+                      No plate behind it: the lockup is white-on-transparent, so it sits
+                      directly on the card and the hover carries the interaction instead. */}
                   <div
                     className={cn(
-                      "relative flex items-center justify-center overflow-hidden bg-secondary p-8",
+                      "relative flex items-center justify-center p-8",
                       isSingle ? "sm:w-2/5 sm:shrink-0" : "aspect-[16/9]",
                     )}
                   >
@@ -84,9 +86,8 @@ export function PortfolioSection() {
                       alt={company.name}
                       width={280}
                       height={100}
-                      className="max-h-20 object-contain transition-transform duration-500 group-hover:scale-105"
+                      className="max-h-28 object-contain transition-transform duration-500 group-hover:-translate-y-1 group-hover:scale-105 md:max-h-20"
                     />
-                    <div className="absolute inset-0 bg-accent/0 transition-colors duration-500 group-hover:bg-accent/5" />
                   </div>
 
                   <div className="flex flex-1 flex-col p-6 md:p-8">
@@ -100,12 +101,6 @@ export function PortfolioSection() {
                     <p className="text-sm leading-relaxed text-muted-foreground">
                       {company.description}
                     </p>
-
-                    <div className="mt-auto border-t border-border pt-4">
-                      <span className="text-sm font-medium text-accent group-hover:underline">
-                        {t("portfolio.visit")} &rarr;
-                      </span>
-                    </div>
                   </div>
                 </a>
                 </GyroLayer>

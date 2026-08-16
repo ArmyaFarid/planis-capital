@@ -8,7 +8,6 @@ export const SECTION_IDS = [
   "nos-criteres",
   "nos-valeurs",
   "portefeuille",
-  "notre-politique",
   "contact",
 ] as const
 

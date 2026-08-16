@@ -2,11 +2,11 @@
 
 import { motion } from "motion/react"
 import {
-  LeverageDiagram,
-  MajorityDiagram,
-  MarketDiagram,
-  ProfitabilityDiagram,
-} from "@/components/criteria-diagrams"
+  LeverageIcon,
+  MajorityIcon,
+  MarketIcon,
+  ProfitabilityIcon,
+} from "@/components/criteria-icons"
 import { ScrambleText } from "@/components/motion/scramble-text"
 import { WeightScroll } from "@/components/motion/weight-scroll"
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal"
@@ -21,22 +21,22 @@ export function CriteriaSection() {
 
   const criteria = [
     {
-      Diagram: MajorityDiagram,
+      Icon: MajorityIcon,
       title: t("criteria.majority"),
       description: t("criteria.majority.desc"),
     },
     {
-      Diagram: ProfitabilityDiagram,
+      Icon: ProfitabilityIcon,
       title: t("criteria.profitability"),
       description: t("criteria.profitability.desc"),
     },
     {
-      Diagram: MarketDiagram,
+      Icon: MarketIcon,
       title: t("criteria.market"),
       description: t("criteria.market.desc"),
     },
     {
-      Diagram: LeverageDiagram,
+      Icon: LeverageIcon,
       title: t("criteria.leverage"),
       description: t("criteria.leverage.desc"),
     },
@@ -52,7 +52,7 @@ export function CriteriaSection() {
             </span>
           </Reveal>
 
-          <WeightScroll as="h2" className="mt-6 font-serif text-h2 text-balance text-foreground">
+          <WeightScroll as="h2" className="mt-6 font-display text-h2 text-balance text-foreground">
             <AnimatedWords text={t("criteria.title")} trigger="view" />
           </WeightScroll>
         </div>
@@ -65,7 +65,7 @@ export function CriteriaSection() {
               <div className="group h-full border border-transparent bg-background p-8 transition-all duration-500 hover:border-accent/40 hover:shadow-lg md:p-10">
                 <div className="flex items-start gap-6">
                   <motion.div
-                    className="flex h-14 w-14 flex-shrink-0 items-center justify-center bg-primary/10 transition-colors duration-500 group-hover:bg-accent/10"
+                    className="flex h-20 w-20 flex-shrink-0 items-center justify-center bg-primary/10 transition-colors duration-500 group-hover:bg-accent/10 md:h-16 md:w-16"
                     variants={{
                       hidden: { scale: 0.85, opacity: 0 },
                       visible: {
@@ -75,7 +75,7 @@ export function CriteriaSection() {
                       },
                     }}
                   >
-                    <item.Diagram />
+                    <item.Icon />
                   </motion.div>
                   <div>
                     <h3 className="mb-4 font-sans text-h3 font-semibold tracking-tight text-foreground">

@@ -6,7 +6,7 @@ import * as THREE from "three"
 import { AFRICA_POINTS, GLOBE_ARCS, GLOBE_CITIES, WORLD_POINTS } from "@/lib/globe-geo"
 
 // Brand tokens. WebGL can't read CSS custom properties, so these mirror app/globals.css.
-const ACCENT = "#C0432F"
+const ACCENT = "#CE1225"
 const FOREGROUND = "#F7F5F2"
 
 const RADIUS = 1
@@ -303,7 +303,9 @@ function Globe({
     if (!drag.active && !focus) {
       // Idle spin, plus whatever momentum is left from the last drag. Suspended while a
       // section owns the globe, otherwise the spin fights the fly-to.
-      drag.offset += delta * 0.075 + drag.velocity
+      // 0.18 rad/s ≈ one revolution every 35s — slow enough to read as considered, fast
+      // enough that the rotation is legible without staring at it.
+      drag.offset += delta * 0.18 + drag.velocity
       drag.velocity *= 0.94
     }
 

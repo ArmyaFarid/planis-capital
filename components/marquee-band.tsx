@@ -63,7 +63,7 @@ export function MarqueeBand({ className, speed = 55 }: MarqueeBandProps) {
       <motion.div ref={trackRef} className="flex shrink-0 items-center gap-10 pr-10" style={{ x }}>
         {[...sequence, ...sequence].map((item, i) => (
           <div key={`${item}-${i}`} className="flex shrink-0 items-center gap-10">
-            <span className="font-serif text-2xl whitespace-nowrap text-foreground/70 md:text-3xl">
+            <span className="font-display text-2xl whitespace-nowrap text-foreground/70 md:text-3xl">
               {item}
             </span>
             <span className="h-1.5 w-1.5 shrink-0 rotate-45 bg-accent" />

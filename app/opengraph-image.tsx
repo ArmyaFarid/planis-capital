@@ -27,7 +27,7 @@ export default function OpengraphImage() {
             fontSize: 24,
             letterSpacing: 8,
             textTransform: "uppercase",
-            color: "#C0432F",
+            color: "#CE1225",
             fontWeight: 600,
           }}
         >
@@ -38,7 +38,7 @@ export default function OpengraphImage() {
           <div style={{ display: "flex", fontSize: 82, color: "#F7F5F2", lineHeight: 1.05 }}>
             Capital stratégique.
           </div>
-          <div style={{ display: "flex", fontSize: 82, color: "#C0432F", lineHeight: 1.05 }}>
+          <div style={{ display: "flex", fontSize: 82, color: "#CE1225", lineHeight: 1.05 }}>
             Croissance durable.
           </div>
         </div>
@@ -55,7 +55,7 @@ export default function OpengraphImage() {
             fontFamily: "system-ui, sans-serif",
           }}
         >
-          <div style={{ display: "flex", width: 40, height: 4, background: "#C0432F" }} />
+          <div style={{ display: "flex", width: 40, height: 4, background: "#CE1225" }} />
           Investir dans l&apos;avenir de l&apos;Afrique
         </div>
       </div>

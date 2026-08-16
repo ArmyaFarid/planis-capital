@@ -30,7 +30,6 @@ export function Navigation() {
     { href: "#nos-criteres", label: t("nav.criteria") },
     { href: "#nos-valeurs", label: t("nav.values") },
     { href: "#portefeuille", label: t("nav.portfolio") },
-    { href: "#notre-politique", label: t("nav.policy") },
     { href: "#contact", label: t("nav.contact") },
   ]
 
@@ -154,7 +153,7 @@ export function Navigation() {
               priority
               className={cn(
                 "w-auto transition-all duration-500",
-                isScrolled ? "h-12 md:h-14" : "h-14 md:h-20",
+                isScrolled ? "h-14 md:h-14" : "h-16 md:h-20",
                 onDark && "brightness-0 invert",
               )}
             />
@@ -282,7 +281,7 @@ export function Navigation() {
                   key={link.href}
                   href={link.href}
                   onClick={(event) => handleMobileNavClick(event, link.href)}
-                  className="font-serif text-3xl text-primary-foreground transition-colors duration-300 hover:text-accent"
+                  className="font-display text-3xl text-primary-foreground transition-colors duration-300 hover:text-accent"
                   variants={{
                     hidden: { opacity: 0, y: 18 },
                     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE_OUT_EXPO } },

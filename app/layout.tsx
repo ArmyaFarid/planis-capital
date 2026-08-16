@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Instrument_Serif, Inter_Tight } from 'next/font/google'
+import { Comfortaa, Inter_Tight } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { SITE_URL } from '@/lib/site'
 import './globals.css'
@@ -10,12 +10,13 @@ const interTight = Inter_Tight({
   weight: ['400', '500', '600', '700']
 });
 
-// Display serif — ships a single weight by design. Hierarchy comes from size, not weight,
-// so anything below h2 uses Inter Tight semibold instead.
-const instrumentSerif = Instrument_Serif({
+// Display face. Matches the rounded geometric wordmark in the Planis Capital logo, and the
+// heading face on planisgroup.webflow.io. Body copy stays on Inter Tight — Comfortaa is a
+// display type and long paragraphs set in it are noticeably harder to read.
+const comfortaa = Comfortaa({
   subsets: ["latin"],
-  variable: '--font-instrument-serif',
-  weight: '400'
+  variable: '--font-comfortaa',
+  weight: ['400', '500', '600', '700']
 });
 
 const TITLE = 'Planis Capital | Capital stratégique. Croissance durable.'
@@ -79,7 +80,7 @@ export default function RootLayout({
     // legitimately differ on that attribute. Applies one level deep, so it covers only
     // <html>'s own attributes — and incidentally the ones browser extensions inject here.
     <html lang="fr" className="bg-background" suppressHydrationWarning>
-      <body className={`${interTight.variable} ${instrumentSerif.variable} font-sans antialiased`}>
+      <body className={`${interTight.variable} ${comfortaa.variable} font-sans antialiased`}>
         {/*
           Blocking, and deliberately placed before {children}: it decides the intro-curtain
           state before the page markup is even parsed. Doing this in a useEffect means the
@@ -89,8 +90,8 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){var d=document.documentElement;try{
-if(window.matchMedia('(prefers-reduced-motion: reduce)').matches||sessionStorage.getItem('planis.introShown')){d.dataset.intro='skip';return}
-sessionStorage.setItem('planis.introShown','1');d.dataset.intro='show';
+if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){d.dataset.intro='skip';return}
+d.dataset.intro='show';
 if(!location.hash){if('scrollRestoration' in history){history.scrollRestoration='manual'}window.scrollTo(0,0)}
 }catch(e){d.dataset.intro='skip'}})()`,
           }}

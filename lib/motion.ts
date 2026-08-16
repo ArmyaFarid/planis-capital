@@ -5,11 +5,16 @@ export const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const
 export const EASE_OUT_QUART = [0.25, 1, 0.5, 1] as const
 
 /**
- * Shared viewport trigger. `once: true` — reveals are spent on first pass. Replaying them
- * on every scroll-by reads as flicker rather than polish, especially near the trigger
- * boundary where an element can cross in and out repeatedly.
+ * Shared viewport trigger. `once: false` — every reveal replays each time it re-enters, so
+ * the page animates on the way back up as well as down.
+ *
+ * The inset is deliberately top-only ("-10% 0px 0px 0px"), not "-10% 0px". A bottom inset
+ * shrinks the trigger area up from the viewport floor, and anything sitting closer to the
+ * document end than that band can never enter it — the footer's copyright line, 40px above
+ * the page bottom, simply never appeared. The top inset still does the useful work: it
+ * stops an element retriggering while it straddles the upper edge on the way out.
  */
-export const VIEWPORT = { once: true, margin: "-10% 0px" } as const
+export const VIEWPORT = { once: false, margin: "-10% 0px 0px 0px" } as const
 
 /**
  * Timing scale. Long and quart-eased rather than short and expo-eased: expo front-loads

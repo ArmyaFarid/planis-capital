@@ -62,7 +62,7 @@ export function AfricaMap({ className }: AfricaMapProps) {
       <motion.g
         initial={reduce ? false : "hidden"}
         whileInView="visible"
-        viewport={{ once: true, margin: "-15% 0px" }}
+        viewport={{ once: false, margin: "-15% 0px" }}
         variants={{ visible: { transition: { staggerChildren: COUNTRY_STAGGER } } }}
       >
         {AFRICA_COUNTRIES.map((c) => (
@@ -90,7 +90,7 @@ export function AfricaMap({ className }: AfricaMapProps) {
         strokeLinecap="round"
         initial={reduce ? false : { pathLength: 0, opacity: 0 }}
         whileInView={{ pathLength: 1, opacity: 1 }}
-        viewport={{ once: true, margin: "-15% 0px" }}
+        viewport={{ once: false, margin: "-15% 0px" }}
         transition={{
           pathLength: { duration: 2.2, delay: OUTLINE_AT, ease: [0.25, 1, 0.5, 1] },
           opacity: { duration: 0.2, delay: OUTLINE_AT },
@@ -101,7 +101,7 @@ export function AfricaMap({ className }: AfricaMapProps) {
       <motion.g
         initial={reduce ? false : "hidden"}
         whileInView="visible"
-        viewport={{ once: true, margin: "-15% 0px" }}
+        viewport={{ once: false, margin: "-15% 0px" }}
         variants={{ visible: { transition: { delayChildren: ARCS_AT, staggerChildren: 0.08 } } }}
       >
         {AFRICA_ARCS.map(([a, b]) => (
@@ -126,7 +126,7 @@ export function AfricaMap({ className }: AfricaMapProps) {
         <motion.g
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: "-15% 0px" }}
+          viewport={{ once: false, margin: "-15% 0px" }}
           transition={{ delay: ARCS_AT + 0.9, duration: 0.6 }}
         >
           {AFRICA_ARCS.map(([a, b], i) => (
@@ -149,7 +149,7 @@ export function AfricaMap({ className }: AfricaMapProps) {
       <motion.g
         initial={reduce ? false : "hidden"}
         whileInView="visible"
-        viewport={{ once: true, margin: "-15% 0px" }}
+        viewport={{ once: false, margin: "-15% 0px" }}
         variants={{ visible: { transition: { delayChildren: NODES_AT, staggerChildren: 0.09 } } }}
       >
         {AFRICA_NODES.map((n, i) => (

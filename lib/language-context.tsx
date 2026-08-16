@@ -20,7 +20,6 @@ const translations: Record<Language, Record<string, string>> = {
     "nav.criteria": "Nos Critères",
     "nav.values": "Nos Valeurs",
     "nav.portfolio": "Portefeuille",
-    "nav.policy": "Notre Politique",
     "nav.contact": "Nous Contacter",
     
     // Hero
@@ -34,13 +33,6 @@ const translations: Record<Language, Record<string, string>> = {
     "gyro.enable": "Activer",
     "gyro.hint": "Inclinez votre téléphone pour explorer",
     "gyro.dismiss": "Ignorer",
-
-    // Stats — see STATS in components/stats-section.tsx for the values
-    "stats.section": "En bref",
-    "stats.founded": "Année de création",
-    "stats.sectors": "Secteurs ciblés",
-    "stats.companies": "Sociétés en portefeuille",
-    "stats.countries": "Pays couverts",
 
     // About
     "about.section": "01 — À Propos",
@@ -91,34 +83,15 @@ const translations: Record<Language, Record<string, string>> = {
     "portfolio.visit": "Visiter le site",
     "portfolio.westml.desc": "West-ML Innovation est spécialisée dans les solutions technologiques innovantes pour l'Afrique de l'Ouest.",
     "portfolio.westml.sector": "Innovation & Technologie",
-    
-    // Policy
-    "policy.section": "05 — Notre Politique",
-    "policy.title": "Politique de confidentialité",
-    "policy.intro": "Notre politique de confidentialité décrit nos pratiques en matière de confidentialité. Elle s'applique uniquement aux informations collectées par notre site web.",
-    "policy.access": "Accès et contrôle aux informations",
-    "policy.access.desc": "Vous pouvez à tout moment choisir de ne plus être contacté par nous en nous contactant à l'adresse électronique indiquée sur notre site web.",
-    "policy.cookies": "Utilisation des témoins (« cookies »)",
-    "policy.cookies.desc": "Nous pouvons recueillir des données au moyen de témoins lorsque vous consultez notre site Web. Les données recueillies sont des données agrégées et demeurent anonymes.",
-    "policy.security": "Mesures de protection et sécurité",
-    "policy.security.desc": "Nous prenons l'engagement d'assurer une protection diligente de notre site web quant à l'accès non autorisé aux données confidentielles.",
-    "policy.warning": "Avertissement",
-    "policy.warning.desc": "Nous nous assurons diligemment que l'information diffusée sur notre site soit la plus exacte et actualisée.",
-    "policy.changes": "Changements",
-    "policy.changes.desc": "Nous nous réservons le droit de modifier la présente Politique en tout temps et sans préavis.",
-    "policy.contact": "Préoccupations sur la confidentialité des données ?",
-    
+
     // Contact
-    "contact.section": "06 — Contact",
+    "contact.section": "05 — Contact",
     "contact.title": "Contactez-nous dès maintenant",
-    "contact.subtitle": "Vous avez un projet ? Vous souhaitez en savoir plus sur nos opportunités d'investissement ? N'hésitez pas à nous contacter.",
-    "contact.cta": "Envoyer un message",
+    "contact.subtitle": "Vous avez un projet ? Vous souhaitez en savoir plus sur nos opportunités d'investissement ?",
     
     // Footer
     "footer.description": "Société de portefeuille canadienne dédiée à l'acquisition et la consolidation de PME dans les secteurs de la santé et du développement industriel en Afrique.",
     "footer.menu": "Menu",
-    "footer.policies": "Politiques",
-    "footer.privacy": "Politique de confidentialité",
     "footer.home": "Accueil",
     "footer.rights": "Tous droits réservés.",
   },
@@ -128,7 +101,6 @@ const translations: Record<Language, Record<string, string>> = {
     "nav.criteria": "Our Criteria",
     "nav.values": "Our Values",
     "nav.portfolio": "Portfolio",
-    "nav.policy": "Our Policy",
     "nav.contact": "Contact Us",
     
     // Hero
@@ -142,13 +114,6 @@ const translations: Record<Language, Record<string, string>> = {
     "gyro.enable": "Enable",
     "gyro.hint": "Tilt your phone to explore",
     "gyro.dismiss": "Dismiss",
-
-    // Stats — see STATS in components/stats-section.tsx for the values
-    "stats.section": "At a glance",
-    "stats.founded": "Founded",
-    "stats.sectors": "Target sectors",
-    "stats.companies": "Portfolio companies",
-    "stats.countries": "Countries covered",
 
     // About
     "about.section": "01 — About",
@@ -199,34 +164,15 @@ const translations: Record<Language, Record<string, string>> = {
     "portfolio.visit": "Visit website",
     "portfolio.westml.desc": "West-ML Innovation specializes in innovative technology solutions for West Africa.",
     "portfolio.westml.sector": "Innovation & Technology",
-    
-    // Policy
-    "policy.section": "05 — Our Policy",
-    "policy.title": "Privacy Policy",
-    "policy.intro": "Our privacy policy describes our privacy practices. It applies only to information collected by our website.",
-    "policy.access": "Access and Control of Information",
-    "policy.access.desc": "You can choose at any time to no longer be contacted by us by contacting us at the email address listed on our website.",
-    "policy.cookies": "Use of Cookies",
-    "policy.cookies.desc": "We may collect data through cookies when you visit our website. The data collected is aggregated and remains anonymous.",
-    "policy.security": "Protection and Security Measures",
-    "policy.security.desc": "We are committed to ensuring diligent protection of our website against unauthorized access to confidential data.",
-    "policy.warning": "Disclaimer",
-    "policy.warning.desc": "We diligently ensure that the information published on our site is as accurate and up-to-date as possible.",
-    "policy.changes": "Changes",
-    "policy.changes.desc": "We reserve the right to modify this Policy at any time without notice.",
-    "policy.contact": "Concerns about data privacy?",
-    
+
     // Contact
-    "contact.section": "06 — Contact",
+    "contact.section": "05 — Contact",
     "contact.title": "Contact us now",
-    "contact.subtitle": "Do you have a project? Would you like to learn more about our investment opportunities? Don't hesitate to contact us.",
-    "contact.cta": "Send a message",
+    "contact.subtitle": "Do you have a project? Would you like to learn more about our investment opportunities?",
     
     // Footer
     "footer.description": "Canadian holding company dedicated to acquiring and consolidating SMEs in the healthcare and industrial development sectors in Africa.",
     "footer.menu": "Menu",
-    "footer.policies": "Policies",
-    "footer.privacy": "Privacy Policy",
     "footer.home": "Home",
     "footer.rights": "All rights reserved.",
   }

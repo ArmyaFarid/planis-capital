@@ -25,28 +25,28 @@
   --secondary-foreground: #F7F5F2;
   --muted: #16294A;
   --muted-foreground: #B8C0CC;
-  --accent: #C0432F;
+  --accent: #CE1225;
   --accent-foreground: #F7F5F2;
-  --accent-hover: #9E3322;
-  --destructive: #C0432F;
+  --accent-hover: #A50D1C;
+  --destructive: #CE1225;
   --destructive-foreground: #F7F5F2;
   --border: #243B5E;
   --input: #243B5E;
-  --ring: #C0432F;
-  --chart-1: #C0432F;
+  --ring: #CE1225;
+  --chart-1: #CE1225;
   --chart-2: #B8C0CC;
-  --chart-3: #9E3322;
+  --chart-3: #A50D1C;
   --chart-4: #243B5E;
   --chart-5: #F7F5F2;
   --radius: 0.5rem;
   --sidebar: #0A1628;
   --sidebar-foreground: #F7F5F2;
-  --sidebar-primary: #C0432F;
+  --sidebar-primary: #CE1225;
   --sidebar-primary-foreground: #F7F5F2;
   --sidebar-accent: #16294A;
   --sidebar-accent-foreground: #F7F5F2;
   --sidebar-border: #243B5E;
-  --sidebar-ring: #C0432F;
+  --sidebar-ring: #CE1225;
 }
 
 /* Fluid type + shared easing. Plain @theme (not inline) so Tailwind emits the vars and
@@ -103,7 +103,7 @@
 
 @theme inline {
   --font-sans: var(--font-inter-tight), 'Inter Tight', system-ui, sans-serif;
-  --font-serif: var(--font-instrument-serif), 'Instrument Serif', Georgia, serif;
+  --font-display: var(--font-comfortaa), 'Comfortaa', system-ui, sans-serif;
   --color-accent-hover: var(--accent-hover);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -150,9 +150,9 @@
   body {
     @apply bg-background text-foreground;
   }
-  /* Instrument Serif runs optically large and loose; pull it in for display use. */
-  .font-serif {
-    letter-spacing: -0.015em;
+  /* Comfortaa is drawn wide and loose; pull it in for display use. */
+  .font-display {
+    letter-spacing: -0.02em;
   }
 }
 

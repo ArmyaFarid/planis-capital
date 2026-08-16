@@ -1,8 +1,8 @@
 "use client"
 
-import type { ReactNode } from "react"
+import { useRef, type ReactNode } from "react"
 
-import { motion, useReducedMotion, type Variants } from "motion/react"
+import { motion, useInView, useReducedMotion, type Variants } from "motion/react"
 import { cn } from "@/lib/utils"
 import { VIEWPORT, fadeUp, staggerParentWith } from "@/lib/motion"
 /**
@@ -25,9 +25,18 @@ interface RevealProps {
 /**
  * Scroll-triggered reveal. Replaces the five hand-rolled IntersectionObserver copies
  * that used to live in about/criteria/values/portfolio/contact.
+ *
+ * Driven by an explicit `useInView` + `animate` rather than `whileInView`. The two are
+ * equivalent while reveals are one-shot, but once they replay (`VIEWPORT.once: false`)
+ * `whileInView` can strand an element on "hidden" while it is plainly on screen —
+ * observed on the footer, which sits at the document end and so gets no further scroll
+ * events to correct itself. Reading the boolean and mapping it to a variant label makes
+ * the visible state a pure function of "is it in view", which cannot desynchronise.
  */
 export function Reveal({ children, className, delay = 0, variants = fadeUp, as = "div" }: RevealProps) {
   const reduce = useReducedMotion()
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, VIEWPORT)
   const Comp = motion[as as keyof typeof motion] as typeof motion.div
 
   if (reduce) {
@@ -37,10 +46,10 @@ export function Reveal({ children, className, delay = 0, variants = fadeUp, as =
 
   return (
     <Comp
+      ref={ref}
       className={className}
       initial="hidden"
-      whileInView="visible"
-      viewport={VIEWPORT}
+      animate={inView ? "visible" : "hidden"}
       variants={variants}
       transition={{ delay }}
     >
@@ -70,6 +79,8 @@ export function RevealGroup({
   as = "div",
 }: RevealGroupProps) {
   const reduce = useReducedMotion()
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, VIEWPORT)
   const Comp = motion[as as keyof typeof motion] as typeof motion.div
 
   if (reduce) {
@@ -79,10 +90,10 @@ export function RevealGroup({
 
   return (
     <Comp
+      ref={ref}
       className={className}
       initial="hidden"
-      whileInView="visible"
-      viewport={VIEWPORT}
+      animate={inView ? "visible" : "hidden"}
       variants={staggerParentWith(stagger, delayChildren)}
     >
       {children}

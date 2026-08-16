@@ -9,16 +9,16 @@ import { lockScroll } from "@/lib/scroll-lock"
 const HOLD_MS = 1700
 
 /**
- * Brand curtain on first load.
+ * Brand curtain, on every load.
  *
  * Starts `visible` so it is present in the server-rendered HTML and covers the very first
  * paint — deciding in an effect instead would let the hero paint first and drop the
  * curtain on top of it, which looks like content flashing behind a loader.
  *
  * Whether this load actually gets a curtain is decided by the blocking script in
- * layout.tsx (session + reduced-motion), which stamps `data-intro` on <html> before any
- * markup is parsed. CSS hides the curtain instantly for the skip case; this component
- * then unmounts it on hydration.
+ * layout.tsx (reduced-motion only), which stamps `data-intro` on <html> before any markup
+ * is parsed. CSS hides the curtain instantly for the skip case; this component then
+ * unmounts it on hydration.
  */
 export function IntroCurtain() {
   const [visible, setVisible] = useState(true)

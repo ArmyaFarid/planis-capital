@@ -5,11 +5,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { ChevronDown } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
-import { StatsStrip } from "@/components/stats-strip"
 import { MobileGlobe } from "@/components/globe/mobile-globe"
 import { useGyroTilt } from "@/lib/use-gyro-tilt"
-import { AnimatedChars } from "@/components/motion/animated-text"
-import { GyroSheen } from "@/components/motion/gyro-layer"
 import { Magnetic } from "@/components/motion/magnetic"
 import { EASE_OUT_QUART } from "@/lib/motion"
 import { useLanguage } from "@/lib/language-context"
@@ -130,14 +127,14 @@ export function HeroSection() {
             {/* No "Planis Capital" eyebrow: the logo in the header already carries the
                 name, so repeating it above the headline is the same redundancy as the
                 portfolio card's duplicated wordmark. */}
-            <h1 className="font-serif text-display text-primary-foreground">
-              {/* Sheen goes on title1: title2 already runs the one-shot text-sweep, and
-                  two animations driving background-position would fight. */}
-              <GyroSheen>
-                <AnimatedChars text={t("hero.title1")} />
-              </GyroSheen>
+            {/* Deliberately unanimated. The slogan must be legible at every moment, and
+                both of the effects that used to live here (GyroSheen, and AnimatedChars'
+                `sweep`) paint through background-clip:text, which requires a transparent
+                fill — any load where that clip fails to paint leaves the headline blank. */}
+            <h1 className="font-display text-display text-primary-foreground">
+              {t("hero.title1")}
               <br />
-              <AnimatedChars text={t("hero.title2")} className="text-accent" sweep />
+              <span className="text-accent">{t("hero.title2")}</span>
             </h1>
 
             <motion.p
@@ -205,10 +202,9 @@ export function HeroSection() {
         }}
       />
 
-      {/* Stat band + scroll cue */}
+      {/* Scroll cue */}
       <div className="container relative z-10 mx-auto px-4 pb-8 md:px-8">
-        <StatsStrip />
-        <div className="mt-8 hidden justify-center md:flex">
+        <div className="hidden justify-center md:flex">
           <Link
             href="#a-propos"
             className="flex flex-col items-center text-primary-foreground/55 transition-colors duration-300 hover:text-primary-foreground"

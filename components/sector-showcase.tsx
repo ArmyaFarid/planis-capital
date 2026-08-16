@@ -69,7 +69,11 @@ export function SectorShowcase({ sectors }: SectorShowcaseProps) {
               {sectors.map((sector) => (
                 <div key={sector.title} className="w-[38vw] shrink-0 xl:w-[32vw]">
                   <TiltCard max={6}>
-                    <SectorCard {...sector} />
+                    {/* inCarousel applies here too: this track is the same shape as the
+                        mobile one — slides inside an overflow-hidden container moved by
+                        transform — so the per-card scroll reveal cannot be trusted. The
+                        last card in particular was left permanently clipped. */}
+                    <SectorCard {...sector} inCarousel />
                   </TiltCard>
                 </div>
               ))}

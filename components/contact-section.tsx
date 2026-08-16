@@ -1,11 +1,10 @@
 "use client"
 
-import { Mail, Send } from "lucide-react"
+import { Mail } from "lucide-react"
 import { ScrambleText } from "@/components/motion/scramble-text"
 import { WeightScroll } from "@/components/motion/weight-scroll"
 import { Reveal } from "@/components/motion/reveal"
 import { GyroLayer } from "@/components/motion/gyro-layer"
-import { Magnetic } from "@/components/motion/magnetic"
 import { AnimatedWords } from "@/components/motion/animated-text"
 import { cardIn } from "@/lib/motion"
 import { useLanguage } from "@/lib/language-context"
@@ -26,7 +25,7 @@ export function ContactSection() {
               </span>
             </Reveal>
 
-            <WeightScroll as="h2" className="mt-6 font-serif text-h2 text-balance text-foreground">
+            <WeightScroll as="h2" className="mt-6 font-display text-h2 text-balance text-foreground">
               <AnimatedWords text={t("contact.title")} trigger="view" />
             </WeightScroll>
           </div>
@@ -44,23 +43,11 @@ export function ContactSection() {
 
               <a
                 href={`mailto:${EMAIL}`}
-                className="mb-8 inline-block font-serif text-3xl text-accent transition-colors duration-300 hover:text-accent-hover"
+                data-cursor="link"
+                className="inline-block font-display text-3xl text-accent transition-colors duration-300 hover:text-accent-hover"
               >
                 {EMAIL}
               </a>
-
-              <div className="flex justify-center">
-                <Magnetic>
-                <a
-                  href={`mailto:${EMAIL}`}
-                  data-cursor="link"
-                  className="group/cta inline-flex items-center bg-accent px-8 py-4 font-semibold text-accent-foreground transition-colors duration-300 hover:bg-accent-hover"
-                >
-                  <Send className="mr-2 h-5 w-5 transition-transform duration-300 group-hover/cta:translate-x-1" />
-                  {t("contact.cta")}
-                </a>
-                </Magnetic>
-              </div>
             </div>
             </GyroLayer>
           </Reveal>

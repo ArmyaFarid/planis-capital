@@ -34,7 +34,7 @@ function ValueCard({ index, title, description }: { index: number; title: string
         <motion.span
           aria-hidden="true"
           style={reduce ? undefined : { y, opacity: numberOpacity, x: gyro.tx, rotateY: gyro.ry, transformPerspective: 800 }}
-          className="block font-serif text-8xl leading-none text-primary-foreground transition-colors duration-500 group-hover:text-accent"
+          className="block font-display text-8xl leading-none text-primary-foreground transition-colors duration-500 group-hover:text-accent"
         >
           {String(index + 1).padStart(2, "0")}
         </motion.span>
@@ -70,7 +70,7 @@ export function ValuesSection() {
             </span>
           </Reveal>
 
-          <WeightScroll as="h2" className="mt-6 font-serif text-h2 text-balance text-primary-foreground">
+          <WeightScroll as="h2" className="mt-6 font-display text-h2 text-balance text-primary-foreground">
             <AnimatedWords text={t("values.title")} trigger="view" />
           </WeightScroll>
 
