@@ -34,12 +34,6 @@ export function Footer() {
             <p className="text-primary-foreground/60 max-w-md leading-relaxed">
               {t("footer.description")}
             </p>
-            <Link
-              href="#contact"
-              className="mt-6 inline-block text-primary-foreground/60 hover:text-accent transition-colors duration-300"
-            >
-              {t("nav.contact")}
-            </Link>
           </RevealItem>
 
           {/* Menu */}

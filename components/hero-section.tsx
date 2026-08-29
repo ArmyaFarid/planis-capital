@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ChevronDown } from "lucide-react"
-import { motion, useReducedMotion } from "motion/react"
+import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { MobileGlobe } from "@/components/globe/mobile-globe"
 import { useGyroTilt } from "@/lib/use-gyro-tilt"
 import { Magnetic } from "@/components/motion/magnetic"
@@ -86,6 +86,15 @@ export function HeroSection() {
   // on its own, and only reads as depth against the backdrop and globe moving more.
   const copyTilt = useGyroTilt(0.5)
 
+  // Cycles the two-line tagline: each half shows, then hides, then the other takes its
+  // turn, on a loop.
+  const [taglineIndex, setTaglineIndex] = useState(0)
+  useEffect(() => {
+    if (reduce) return
+    const id = setInterval(() => setTaglineIndex((i) => (i + 1) % 2), 2800)
+    return () => clearInterval(id)
+  }, [reduce])
+
   const container = {
     hidden: {},
     visible: { transition: { staggerChildren: 0.12, delayChildren: 0.2 } },
@@ -127,14 +136,22 @@ export function HeroSection() {
             {/* No "Planis Capital" eyebrow: the logo in the header already carries the
                 name, so repeating it above the headline is the same redundancy as the
                 portfolio card's duplicated wordmark. */}
-            {/* Deliberately unanimated. The slogan must be legible at every moment, and
-                both of the effects that used to live here (GyroSheen, and AnimatedChars'
-                `sweep`) paint through background-clip:text, which requires a transparent
-                fill — any load where that clip fails to paint leaves the headline blank. */}
+            {/* Cycles between the two lines of the tagline, one at a time, on a timed
+                loop. Opacity/y only (no background-clip:text), so it avoids the
+                blank-paint issue the earlier GyroSheen/sweep effects had here. */}
             <h1 className="font-display text-display text-primary-foreground">
-              {t("hero.title1")}
-              <br />
-              <span className="text-accent">{t("hero.title2")}</span>
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={taglineIndex}
+                  className={cn("block", taglineIndex === 1 && "text-accent")}
+                  initial={reduce ? false : { opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={reduce ? undefined : { opacity: 0, y: -16 }}
+                  transition={{ duration: 0.7, ease: EASE_OUT_QUART }}
+                >
+                  {taglineIndex === 0 ? t("hero.title1") : t("hero.title2")}
+                </motion.span>
+              </AnimatePresence>
             </h1>
 
             <motion.p

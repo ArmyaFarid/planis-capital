@@ -18,6 +18,13 @@
  * permission gone, but no way left to re-ask. Resetting per load is the only behaviour
  * that matches the platform.
  */
+/**
+ * Master on/off switch for the gyroscope (device-orientation) feature — both the tilt
+ * effects used across the site and the iOS "enable tilt" prompt. Flip to `true` to bring
+ * everything back; leave `false` to keep the feature fully off.
+ */
+export const GYRO_ENABLED = false
+
 let askedThisLoad = false
 
 type Listener = (granted: boolean) => void
@@ -63,6 +70,7 @@ export function subscribeGyro(fn: Listener) {
 /** Whether the prompt should be offered: iOS, touch, and not already asked this session. */
 export function shouldOfferGyro() {
   if (typeof window === "undefined") return false
+  if (!GYRO_ENABLED) return false
 
   // Preview escape hatch: ?gyro=1 shows the bar on any device. The real prompt only ever
   // appears on iOS Safari, which cannot be reproduced by devtools device emulation —

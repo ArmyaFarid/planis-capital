@@ -44,7 +44,7 @@ export function ContactSection() {
               <a
                 href={`mailto:${EMAIL}`}
                 data-cursor="link"
-                className="inline-block font-display text-3xl text-accent transition-colors duration-300 hover:text-accent-hover"
+                className="inline-block border-2 border-accent/50 px-6 py-3 font-display text-2xl text-accent transition-colors duration-300 hover:border-accent hover:bg-accent/10 hover:text-accent-hover md:text-3xl"
               >
                 {EMAIL}
               </a>

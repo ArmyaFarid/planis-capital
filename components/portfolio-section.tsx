@@ -1,7 +1,6 @@
 "use client"
 
 import Image from "next/image"
-import { ArrowUpRight } from "lucide-react"
 import { ScrambleText } from "@/components/motion/scramble-text"
 import { WeightScroll } from "@/components/motion/weight-scroll"
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal"
@@ -67,20 +66,11 @@ export function PortfolioSection() {
                   target="_blank"
                   rel="noopener noreferrer"
                   data-cursor-label={t("portfolio.visit")}
-                  className={cn(
-                    "group flex h-full flex-col overflow-hidden border border-border bg-card transition-all duration-500 hover:-translate-y-1 hover:border-accent/50 hover:shadow-lg",
-                    isSingle && "sm:flex-row",
-                  )}
+                  className="group flex h-full flex-col overflow-hidden border border-border bg-card transition-all duration-500 hover:-translate-y-1 hover:border-accent/50 hover:shadow-lg"
                 >
-                  {/* The logo IS the company name — no heading repeating it underneath.
-                      No plate behind it: the lockup is white-on-transparent, so it sits
-                      directly on the card and the hover carries the interaction instead. */}
-                  <div
-                    className={cn(
-                      "relative flex items-center justify-center p-8",
-                      isSingle ? "sm:w-2/5 sm:shrink-0" : "aspect-[16/9]",
-                    )}
-                  >
+                  {/* The logo IS the company name — no heading, no description, just the
+                      mark. Still fully clickable everywhere on the card. */}
+                  <div className="relative flex flex-1 items-center justify-center p-12 md:p-16">
                     <Image
                       src={company.logo}
                       alt={company.name}
@@ -88,19 +78,6 @@ export function PortfolioSection() {
                       height={100}
                       className="max-h-28 object-contain transition-transform duration-500 group-hover:-translate-y-1 group-hover:scale-105 md:max-h-20"
                     />
-                  </div>
-
-                  <div className="flex flex-1 flex-col p-6 md:p-8">
-                    <div className="mb-3 flex items-start justify-between gap-4">
-                      <span className="text-xs font-medium uppercase tracking-[0.18em] text-accent">
-                        {company.sector}
-                      </span>
-                      <ArrowUpRight className="h-5 w-5 flex-shrink-0 text-muted-foreground transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent" />
-                    </div>
-
-                    <p className="text-sm leading-relaxed text-muted-foreground">
-                      {company.description}
-                    </p>
                   </div>
                 </a>
                 </GyroLayer>

@@ -1,7 +1,7 @@
 "use client"
 
 import { motionValue } from "motion/react"
-import { isGyroGranted, subscribeGyro } from "./gyro"
+import { GYRO_ENABLED, isGyroGranted, subscribeGyro } from "./gyro"
 
 /**
  * One sensor, one listener, one smoothing loop — shared by every consumer.
@@ -66,6 +66,7 @@ function detach() {
 export function startGyroSource() {
   if (started) return
   started = true
+  if (!GYRO_ENABLED) return
 
   if (typeof window === "undefined" || !("DeviceOrientationEvent" in window)) return
   // Coarse pointer only: a laptop with an accelerometer would tilt from desk vibration.
