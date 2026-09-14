@@ -66,7 +66,7 @@ export function PortfolioSection() {
                   target="_blank"
                   rel="noopener noreferrer"
                   data-cursor-label={t("portfolio.visit")}
-                  className="group flex h-full flex-col overflow-hidden border border-border bg-card transition-all duration-500 hover:-translate-y-1 hover:border-accent/50 hover:shadow-lg"
+                  className="group flex h-full flex-col overflow-hidden  transition-all duration-500"
                 >
                   {/* The logo IS the company name — no heading, no description, just the
                       mark. Still fully clickable everywhere on the card. */}
