@@ -25,28 +25,28 @@
   --secondary-foreground: #F7F5F2;
   --muted: #16294A;
   --muted-foreground: #B8C0CC;
-  --accent: #CE1225;
+  --accent: #D9481F;
   --accent-foreground: #F7F5F2;
-  --accent-hover: #A50D1C;
+  --accent-hover: #B03816;
   --destructive: #CE1225;
   --destructive-foreground: #F7F5F2;
   --border: #243B5E;
   --input: #243B5E;
-  --ring: #CE1225;
-  --chart-1: #CE1225;
+  --ring: #D9481F;
+  --chart-1: #D9481F;
   --chart-2: #B8C0CC;
-  --chart-3: #A50D1C;
+  --chart-3: #B03816;
   --chart-4: #243B5E;
   --chart-5: #F7F5F2;
   --radius: 0.5rem;
   --sidebar: #0A1628;
   --sidebar-foreground: #F7F5F2;
-  --sidebar-primary: #CE1225;
+  --sidebar-primary: #D9481F;
   --sidebar-primary-foreground: #F7F5F2;
   --sidebar-accent: #16294A;
   --sidebar-accent-foreground: #F7F5F2;
   --sidebar-border: #243B5E;
-  --sidebar-ring: #CE1225;
+  --sidebar-ring: #D9481F;
 }
 
 /* Fluid type + shared easing. Plain @theme (not inline) so Tailwind emits the vars and
