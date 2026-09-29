@@ -69,15 +69,22 @@ export function PortfolioSection() {
                   className="group flex h-full flex-col overflow-hidden  transition-all duration-500"
                 >
                   {/* The logo IS the company name — no heading, no description, just the
-                      mark. Still fully clickable everywhere on the card. */}
-                  <div className="relative flex flex-1 items-center justify-center p-12 md:p-16">
-                    <Image
-                      src={company.logo}
-                      alt={company.name}
-                      width={280}
-                      height={100}
-                      className="max-h-56 object-contain transition-transform duration-500 group-hover:-translate-y-1 group-hover:scale-105 md:max-h-40"
-                    />
+                      mark, and it dominates the card: `fill` + an aspect box matching the
+                      real 2000x1400 artwork (10:7) so it scales to the box with virtually
+                      no letterboxing, instead of being capped at the old 280x100 intrinsic
+                      size (which under-sized it — that mismatched ratio was letterboxing
+                      the real logo inside its own bounding box). Still fully clickable
+                      everywhere on the card. */}
+                  <div className="relative flex flex-1 items-center justify-center p-6 md:p-8">
+                    <div className="relative aspect-[10/7] w-full max-w-lg">
+                      <Image
+                        src={company.logo}
+                        alt={company.name}
+                        fill
+                        sizes="(min-width: 768px) 32rem, 90vw"
+                        className="object-contain transition-transform duration-500 group-hover:-translate-y-1 group-hover:scale-105"
+                      />
+                    </div>
                   </div>
                 </a>
                 </GyroLayer>
