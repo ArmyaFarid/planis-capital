@@ -41,10 +41,14 @@ export function ContactSection() {
                 {t("contact.subtitle")}
               </p>
 
+              {/* max-w-full + break-words: at text-2xl with px-6 the raw email string was
+                  wider than the available mobile width (card padding + button padding
+                  left little room), so it was overflowing/wrapping unevenly instead of
+                  sitting centered — hence the smaller mobile size below and a safety wrap. */}
               <a
                 href={`mailto:${EMAIL}`}
                 data-cursor="link"
-                className="inline-block border-2 border-accent/50 px-6 py-3 font-display text-2xl text-accent transition-colors duration-300 hover:border-accent hover:bg-accent/10 hover:text-accent-hover md:text-3xl"
+                className="inline-block max-w-full break-words border-2 border-accent/50 px-4 py-3 font-display text-lg text-accent transition-colors duration-300 hover:border-accent hover:bg-accent/10 hover:text-accent-hover sm:px-6 sm:text-2xl md:text-3xl"
               >
                 {EMAIL}
               </a>
