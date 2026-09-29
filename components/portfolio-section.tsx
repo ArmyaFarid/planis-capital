@@ -76,7 +76,7 @@ export function PortfolioSection() {
                       alt={company.name}
                       width={280}
                       height={100}
-                      className="max-h-28 object-contain transition-transform duration-500 group-hover:-translate-y-1 group-hover:scale-105 md:max-h-20"
+                      className="max-h-56 object-contain transition-transform duration-500 group-hover:-translate-y-1 group-hover:scale-105 md:max-h-40"
                     />
                   </div>
                 </a>

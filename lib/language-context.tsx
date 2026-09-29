@@ -105,8 +105,8 @@ const translations: Record<Language, Record<string, string>> = {
     
     // Hero
     "hero.subtitle": "Planis Capital",
-    "hero.title1": "Strategic capital.",
-    "hero.title2": "Sustainable growth.",
+    "hero.title1": "Smart Invest.",
+    "hero.title2": "More Impact.",
     "hero.description": "We invest sustainably in people, ideas and strategic infrastructure needed to accelerate the development of the African economy.",
     "hero.cta1": "Discover our mission",
     "hero.cta2": "Contact us",
@@ -129,7 +129,7 @@ const translations: Record<Language, Record<string, string>> = {
     "sector.health.desc": "Healthcare in Africa represents both a structural challenge and a major growth opportunity with high social impact.",
     "sector.food": "Food Processing",
     "sector.food.desc": "Food processing represents a strategic opportunity to increase the added value of local agricultural production.",
-    "sector.distribution": "Distribution",
+    "sector.distribution": "Supply",
     "sector.distribution.desc": "Distribution plays a strategic role in market structuring and population access to essential goods.",
     
     // Criteria
@@ -138,10 +138,10 @@ const translations: Record<Language, Record<string, string>> = {
     "criteria.majority": "Majority Position",
     "criteria.majority.desc": "Our investment strategy favors majority shareholding, demonstrating our commitment to actively supporting target companies in their development.",
     "criteria.profitability": "Sustainable Profitability",
-    "criteria.profitability.desc": "We target companies capable of generating solid economic performance while ensuring the resilience of their business model over the long term.",
-    "criteria.market": "High-Potential Addressable Market",
-    "criteria.market.desc": "We focus on SMEs positioned in fast-changing African markets, where innovation and unmet needs create fertile ground.",
-    "criteria.leverage": "Adequate Financial Leverage",
+    "criteria.profitability.desc": "We target companies able to generate strong financial performance while ensuring the resilience of their business model",
+    "criteria.market": "High-Potential Opportunity Market",
+    "criteria.market.desc": "Our investment strategy focuses on acquiring majority stakes, which reflects our commitment to actively support targeted SMEs in their growth",
+    "criteria.leverage": "Proper Financial Leverage",
     "criteria.leverage.desc": "Access to tailored financial mechanisms is a key lever for accelerating the growth of the SMEs we support.",
     
     // Values
@@ -152,7 +152,7 @@ const translations: Record<Language, Record<string, string>> = {
     "values.performance.desc": "Excellence in execution and measurable value creation.",
     "values.agility": "Agility",
     "values.agility.desc": "Ability to adapt quickly to African market dynamics.",
-    "values.rigor": "Rigor",
+    "values.rigor": "Diligence",
     "values.rigor.desc": "Discipline in analysis, governance and investment monitoring.",
     "values.innovation": "Innovation",
     "values.innovation.desc": "Promoting creative and transformative solutions.",

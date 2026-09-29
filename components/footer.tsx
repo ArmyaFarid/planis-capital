@@ -29,7 +29,7 @@ export function Footer() {
               alt="Planis Capital"
               width={1500}
               height={1080}
-              className="mb-6 h-16 w-auto brightness-0 invert md:h-14"
+              className="mb-6 h-16 w-auto brightness-0 invert md:h-[5.25rem]"
             />
             <p className="text-primary-foreground/60 max-w-md leading-relaxed">
               {t("footer.description")}

@@ -287,6 +287,12 @@ function Globe({
   const dragRef = useRef({ active: false, lastX: 0, velocity: 0, offset: 0 })
   const framesRef = useRef(0)
   const leanRef = useRef({ x: 0, y: 0 })
+  // Boomerang idle drift: swings a bounded arc either side of a resting offset instead of
+  // spinning all the way round, so Africa (or wherever a drag/focus last left the globe)
+  // never drifts out of view for long. `center` is the offset it swings around, `phase`
+  // is elapsed idle time, and `wasIdling` lets the effect re-anchor without a pop the
+  // moment a drag ends or a scroll-driven focus lets go.
+  const idleRef = useRef({ phase: 0, center: 0, wasIdling: true })
 
   useFrame(({ pointer }, delta) => {
     const g = groupRef.current
@@ -299,15 +305,37 @@ function Globe({
 
     const drag = dragRef.current
     const focus = focusRef.current
+    const idle = idleRef.current
 
-    if (!drag.active && !focus) {
-      // Idle spin, plus whatever momentum is left from the last drag. Suspended while a
-      // section owns the globe, otherwise the spin fights the fly-to.
-      // 0.18 rad/s ≈ one revolution every 35s — slow enough to read as considered, fast
-      // enough that the rotation is legible without staring at it.
-      drag.offset += delta * 0.18 + drag.velocity
-      drag.velocity *= 0.94
+    // Suspended while a drag or a section's fly-to owns the globe, otherwise either
+    // would fight the idle motion.
+    const isIdling = !drag.active && !focus
+
+    if (isIdling && !idle.wasIdling) {
+      // Just returned to idle (drag released, or a scroll-driven focus let go) — anchor
+      // the boomerang's centre to wherever the globe actually is right now.
+      idle.center = drag.offset
+      idle.phase = 0
     }
+
+    if (isIdling) {
+      if (Math.abs(drag.velocity) > 0.0002) {
+        // Let any flick momentum from a drag release settle first; the centre tracks it
+        // down so the boomerang picks up from wherever it comes to rest.
+        drag.offset += drag.velocity
+        drag.velocity *= 0.94
+        idle.center = drag.offset
+      } else {
+        drag.velocity = 0
+        // 24s there-and-back, ±26° — slow enough to read as considered, bounded enough
+        // that the far side of the globe never lingers on screen the way a full spin did.
+        idle.phase += delta
+        const swing = Math.sin((idle.phase / 24) * Math.PI * 2) * 0.45
+        drag.offset = idle.center + swing
+      }
+    }
+
+    idle.wasIdling = isIdling
 
     // Pointer lean, damped and additive — the globe leans toward the cursor without ever
     // fighting the drag offset or the idle spin, so it feels responsive before you touch it.

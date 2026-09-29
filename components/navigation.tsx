@@ -153,7 +153,7 @@ export function Navigation() {
               priority
               className={cn(
                 "w-auto transition-all duration-500",
-                isScrolled ? "h-16 md:h-16" : "h-20 md:h-24",
+                isScrolled ? "h-16 md:h-24" : "h-20 md:h-36",
                 onDark && "brightness-0 invert",
               )}
             />
